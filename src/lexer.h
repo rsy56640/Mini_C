@@ -6,12 +6,13 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "miniC_exception.h"
 
 namespace Mini_C::lexer
 {
 
 	/*
-	 * represent names for: variable and function
+	 * represent names for: variable, function and struct
 	 */
 	using identifier = std::string;
 
@@ -46,24 +47,31 @@ namespace Mini_C::lexer
 
 	/*
 	 * Parameter:
-	 *     c         :  char array to be processed.
+	 *     s         :  char array to be processed.
 	 *     size      :  actual amounts of char to be processed.
-	 *     line_num  :  the current line number, used in exception information.
 	 *
 	 * Return value:
 	 *     return a vector with tokens, then
 	 *
 	 * Exception:
-	 *     throw
-	 *
+	 *     throw Token_Ex, which implies 'error message' and 'position'.
 	 *
 	 */
 	namespace tokenize_util
 	{
 		bool isKeyWord(const std::string&);
 		bool isKeyWord(char);
+		struct Token_Ex
+		{
+			std::string _msg;
+			std::size_t _position;
+			Token_Ex(const std::string& msg, std::size_t position)
+				:_msg(msg), _position(position) {}
+			Token_Ex(std::string&& msg, std::size_t position)
+				:_msg(std::move(msg)), _position(position) {}
+		};
 	}
-	std::vector<token_t> tokenize(const char* c, const std::size_t size, const std::size_t line_num);
+	std::vector<token_t> tokenize(const char* s, const std::size_t size);
 
 
 }// end namespace Mini_C::lexer
