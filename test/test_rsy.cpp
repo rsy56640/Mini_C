@@ -1,4 +1,3 @@
-//#define RSY_TEST
 #ifdef RSY_TEST
 
 #include <iostream>
