@@ -57,14 +57,12 @@ namespace Mini_C::lexer
 	 *     throw Token_Ex, which implies 'error message' and 'position'.
 	 *
 	 */
-	namespace tokenize_util
+	namespace analyzers
 	{
-		bool isKeyWord(const std::string&);
-		bool isKeyWord(char);
 		struct Token_Ex
 		{
-			std::string _msg;
-			std::size_t _position;
+			const std::string _msg;
+			const std::size_t _position;
 			Token_Ex(const std::string& msg, std::size_t position)
 				:_msg(msg), _position(position) {}
 			Token_Ex(std::string&& msg, std::size_t position)
