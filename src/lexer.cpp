@@ -320,7 +320,13 @@ namespace Mini_C::lexer::analyzers {
 #undef write_analyzer
 }
 const int analyzerNum = 6;
-analyzers::analyzer analyzer[6];
+analyzers::analyzer analyzer[] = {
+        analyzers::word_analyzer,
+        analyzers::number_analyzer,
+        analyzers::minus_analyzer,
+        analyzers::single_symbol_analyzer,
+        analyzers::combindable_operator_analyzer,
+};
 
 std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) {
     vector<token_t> r;
