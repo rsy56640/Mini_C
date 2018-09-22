@@ -1,3 +1,4 @@
+#define RELEASE
 #ifdef RELEASE
 int main()
 {
