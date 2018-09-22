@@ -105,6 +105,13 @@ namespace Mini_C::lexer::analyzers {
         inline bool canFollowNumber(char c) {
             return followNumberCharSet.find(c) != followNumberCharSet.end();
         }
+
+        // for calculator
+        const static unordered_set<char> calculatorNormalOperatorCharSet = {'+', '*', '/', '|', '&', '^', '~', '(', ')'};
+        inline bool isInCalculatorNormalOperatorCharSet(char c) {
+            return calculatorNormalOperatorCharSet.find(c) != calculatorNormalOperatorCharSet.end();
+        }
+        // end for calculator
     }
 
 #define write_analyzer(funcname) bool funcname(const char *s, size_t& pos, const size_t size, vector<token_t> &r)
@@ -204,7 +211,7 @@ namespace Mini_C::lexer::analyzers {
                     if (s[pos] != '-' && !supporters::isNum(s[pos]))
                         generateNumberException();
 
-                    size_t right = 0;
+                    int right = 0;
                     bool rminus = false;
                     if (s[pos] == '-') {
                         rminus = true;
@@ -317,10 +324,40 @@ namespace Mini_C::lexer::analyzers {
 
         return true;
     }
+
+
+    // for calculator
+    write_analyzer(calculator_analyzer) {
+        if (number_analyzer(s, pos, size, r))
+            return true;
+
+        char c = s[pos++];
+        if (c == '-') {
+            // to the next meaningful char
+            while (++pos < size && supporters::isDivider(s[pos]));
+            // see if it's minus
+            if (supporters::isNumBegin(s[pos]) && !supporters::rIsInUnminusableSituation(r))
+                return inner_number_analyzer(s, pos, size, r, true);
+            else
+                r.push_back(keywords.find("-")->second);
+        }
+        else if (c == '<' || c == '>')
+            if (c == s[pos])
+                r.push_back(keywords.find(string(2, s[pos]))->second);
+            else
+                throw Token_Ex("not a valid operator.", pos - 1);
+        else if (supporters::isInCalculatorNormalOperatorCharSet(c))
+            r.push_back(keywords.find(string(1, c))->second);
+        else
+            throw Token_Ex("not a valid character.", pos - 1);
+
+        return true;
+    }
+    // end for calculator
 #undef write_analyzer
 }
-const int analyzerNum = 6;
-analyzers::analyzer analyzer[] = {
+const int analyzerNum = 5; //5 in normal, 1 in calculator
+analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
         analyzers::word_analyzer,
         analyzers::number_analyzer,
         analyzers::minus_analyzer,
@@ -349,7 +386,7 @@ std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, 
             }
         }
         if (!ok)
-            throw analyzers::Token_Ex("not a recognizable character.", pos);
+            return analyzers::Token_Ex("not a recognizable character.", pos);
     }
 
     return r;
