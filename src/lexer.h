@@ -35,7 +35,10 @@ namespace Mini_C::lexer
 	 *                               2. operators
 	 *                               3. others, like `,;()[]{}`
 	 */
-	enum class type { /* implementation defined */ };
+	enum class type
+	{
+		ADD, SUB, MUL, DIV, SELF_INC, SELF_DEC,
+	};
 	static const std::unordered_map<std::string, type> keywords = {};
 
 

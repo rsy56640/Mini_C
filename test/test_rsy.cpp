@@ -3,9 +3,16 @@
 #include "../src/lexer.h"
 #include "../src/miniC_exception.h"
 
-int main()
+void test()
 {
 
+
+
+}
+
+int main()
+{
+	test();
 	std::getchar();
 	return 0;
 }
