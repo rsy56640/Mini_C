@@ -163,7 +163,7 @@ namespace Mini_C::lexer::analyzers {
 			return false;
 
 		++pos;
-		r.push_back(keywords.find(string(1, s[pos]))->second);
+		r.push_back(keywords.find(string(1, s[pos]))->second); // bug when input is: "(3+4.2)-abc+32"
 		return true;
 	}
 
@@ -364,30 +364,32 @@ analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculato
 		analyzers::single_symbol_analyzer,
 		analyzers::combindable_operator_analyzer,
 };
+namespace Mini_C::lexer
+{
+	std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) {
+		vector<token_t> r;
+		bool ok;
+		for (size_t pos = 0; pos < size; ) {
+			ok = false;
+			if (analyzers::supporters::isDivider(s[pos])) {
+				++pos;
+				continue;
+			}
+			for (size_t i = 0; i < analyzerNum; i++) {
+				//if it returns true, means it've done, and there's no need to tackle this round again
+				try {
+					ok = analyzer[i](s, pos, size, r);
+					if (ok)
+						break;
+				}
+				catch (analyzers::Token_Ex& e) {
+					return e;
+				}
+			}
+			if (!ok)
+				return analyzers::Token_Ex("not a recognizable character.", pos);
+		}
 
-std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) {
-	vector<token_t> r;
-	bool ok;
-	for (size_t pos = 0; pos < size; ) {
-		ok = false;
-		if (analyzers::supporters::isDivider(s[pos])) {
-			++pos;
-			continue;
-		}
-		for (size_t i = 0; i < analyzerNum; i++) {
-			//if it returns true, means it've done, and there's no need to tackle this round again
-			try {
-				ok = analyzer[i](s, pos, size, r);
-				if (ok)
-					break;
-			}
-			catch (analyzers::Token_Ex& e) {
-				return e;
-			}
-		}
-		if (!ok)
-			return analyzers::Token_Ex("not a recognizable character.", pos);
+		return r;
 	}
-
-	return r;
 }
