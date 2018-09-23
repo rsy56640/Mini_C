@@ -3,6 +3,7 @@
 #include <variant>
 #include <vector>
 #include <string>
+#include <exception>
 #include <type_traits>
 #include "../src/lexer.h"
 #include "../src/miniC_exception.h"
@@ -39,13 +40,16 @@ void rsy_test()
 		{
 			e.printException();
 		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 		catch (...)
 		{
 			std::cout << "WTF: Unexpected Exception" << std::endl;
 		}
 	}
 }
-
 
 
 int main()

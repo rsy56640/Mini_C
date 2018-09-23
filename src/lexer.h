@@ -42,20 +42,40 @@ namespace Mini_C::lexer
 	 */
 	enum class type
 	{
-		ADD, SUB, MUL, DIV, MOD,
-		SELF_INC, SELF_DEC,
+		/* arithmetic operator */
+		ADD, SUB, MUL, DIV, MOD,                    // + - * / %   // Note: * also can be pointer!!
+		LEFT_SHIFT, RIGHT_SHIFT,                    // << >>
+		NOT, AND, OR, XOR,                          // ~ & | ^     // Note: & also can be take address.
 
-		EQ, NEQ,
-		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ,
 
+		SELF_INC, SELF_DEC,                         // ++ --
+
+		/* logic operator */
+		LOGIC_NOT, LOGIC_AND, LOGIC_OR,             // ! && ||
+
+		/* compare operator */
+		EQ, NEQ,                                    // == !=
+		LESS, GREATER, LEQ, GEQ,                    // < > <= >=
+
+		/* assign operator */
+		ASSIGN,                                     // =
+		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ, MOD_EQ,     // += -= *= /=
+		L_SHIFT_EQ, R_SHIFT_EQ,                     // <<= >>=
+		AND_EQ, OR_EQ, XOR_EQ,                      // &= |=
+
+		/* numeric type */
 		BOOLEAN, CHAR, I16, I32,
 		U16, U32, F32, F64,
 
+		/* special keyword */
 		TRUE, FALSE,
-
 		STRUCT, STR, FN, VOID,
 
+		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
+		QUESTION, COLON,                             // "?", ":"
+		MEMBER_ACCESS,                               // "->"   
+		SIZEOF,                                      // sizeof
 		LEFT_PARENTHESIS, RIGHT_PARENTHESIS,         // parenthesis      : "(", ")"
 		LEFT_SQUARE_BRACKETS, RIGHT_SQUARE_BRACKETS, // square brackets  : "[", "]"
 		LEFT_CURLY_BRACKETS, RIGHT_CURLY_BRACKETS,   // curly brackets   : "{", "}"
@@ -63,31 +83,45 @@ namespace Mini_C::lexer
 	};
 
 	type num_t2type(numeric_type num_t);
-	/*
-	 inline numeric_type type2num_t(type _t) {
-	 return static_cast<numeric_type>(static_cast<std::size_t>(numeric_type::CHAR)
-	 + static_cast<std::size_t>(_t) - static_cast<std::size_t>(type::CHAR));
-	 }*/
-
 	static const std::unordered_map<std::string, type> keywords =
 	{
-			{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },{ "%", type::MOD },
-			{ "++", type::SELF_INC }, { "--", type::SELF_DEC },
+		/* arithmetic operator */
+		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },{ "%", type::MOD },
+		{ "<<", type::LEFT_SHIFT }, { ">>", type::RIGHT_SHIFT },
+		{ "~", type::NOT }, { "&", type::AND }, { "|", type::OR }, { "^", type::XOR },
 
-			{ "=", type::EQ }, { "!=", type::NEQ },
-			{ "+=", type::ADD_EQ }, { "-=", type::SUB_EQ }, { "*=", type::MUL_EQ }, { "/=", type::DIV_EQ },
 
-			{ "bool", type::BOOLEAN }, { "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
-			{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
+		{ "++", type::SELF_INC }, { "--", type::SELF_DEC },
 
-			{ "true", type::TRUE }, { "false", type::FALSE },
+		/* logic operator */
+		{ "!", type::LOGIC_NOT }, { "&&", type::LOGIC_AND }, { "||", type::LOGIC_OR },
 
-			{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
+		/* compare operator */
+		{ "==", type::EQ }, { "!=", type::NEQ },
+		{ "<", type::LESS }, { ">", type::GREATER }, { "<=", type::LEQ }, { ">=", type::GEQ },
 
-			{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
-			{ "(", type::LEFT_PARENTHESIS },      { ")", type::RIGHT_PARENTHESIS },
-			{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
-			{ "{", type::LEFT_CURLY_BRACKETS },   { "}", type::RIGHT_CURLY_BRACKETS },
+		/* assign operator */
+		{ "=", type::ASSIGN },
+		{ "+=", type::ADD_EQ }, { "-=", type::SUB_EQ }, { "*=", type::MUL_EQ }, { "/=", type::DIV_EQ }, { "%=", type::MOD_EQ },
+		{ "<<=", type::L_SHIFT_EQ }, { ">>=", type::R_SHIFT_EQ },
+		{ "&=", type::AND_EQ }, { "|=", type::OR_EQ }, { "^=", type::XOR_EQ },
+
+		/* numeric type */
+		{ "bool", type::BOOLEAN }, { "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
+		{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
+
+		/* special keyword */
+		{ "true", type::TRUE }, { "false", type::FALSE },
+		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
+
+		/* other operator */
+		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
+		{ "?", type::QUESTION }, { ":", type::COLON },
+		{ "->", type::MEMBER_ACCESS },
+		{ "sizeof", type::SIZEOF },
+		{ "(", type::LEFT_PARENTHESIS },      { ")", type::RIGHT_PARENTHESIS },
+		{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
+		{ "{", type::LEFT_CURLY_BRACKETS },   { "}", type::RIGHT_CURLY_BRACKETS },
 
 	};
 
@@ -95,26 +129,44 @@ namespace Mini_C::lexer
 	std::string type2str(type _type);
 	static const std::unordered_map<type, std::string> keyword2str =
 	{
-			{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  }, { type::MOD, "%" },
-			{ type::SELF_INC, "++" }, { type::SELF_DEC, "--" },
+		/* arithmetic operator */
+		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  }, { type::MOD, "%" },
+		{ type::LEFT_SHIFT, "<<" }, { type::RIGHT_SHIFT, ">>" },
+		{ type::NOT, "~" }, { type::AND, "&" }, { type::OR, "|" }, { type::XOR, "^" },
 
-			{ type::EQ , "=" }, { type::NEQ, "!=" },
-			{ type::ADD_EQ, "+=" }, { type::SUB_EQ, "-=" }, { type::MUL_EQ, "*=" }, { type::DIV_EQ, "/=" },
+		{ type::SELF_INC, "++" }, { type::SELF_DEC, "--" },
 
-			{ type::BOOLEAN, "bool" }, { type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
-			{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" }, { type::F64, "f64" },
+		/* logic operator */
+		{ type::LOGIC_NOT, "!" }, { type::LOGIC_AND, "&&" }, { type::LOGIC_OR, "||" },
 
-			{ type::TRUE, "true" }, { type::FALSE, "false" },
+		/* compare operator */
+		{ type::EQ , "==" }, { type::NEQ, "!=" },
+		{ type::LESS , "<" }, { type::GREATER, ">" }, { type::LEQ , "<=" }, { type::GEQ, ">=" },
 
-			{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
+		/* assign operator */
+		{ type::ASSIGN, "=" },
+		{ type::ADD_EQ, "+=" }, { type::SUB_EQ, "-=" }, { type::MUL_EQ, "*=" }, { type::DIV_EQ, "/=" }, { type::MOD_EQ, "%=" },
+		{ type::L_SHIFT_EQ, "<<=" }, { type::R_SHIFT_EQ, ">>=" },
+		{ type::AND_EQ, "&=" }, { type::OR_EQ, "|=" }, { type::XOR_EQ, "^=" },
 
-			{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
-			{ type::LEFT_PARENTHESIS, "(" },      { type::RIGHT_PARENTHESIS, ")" },
-			{ type::LEFT_SQUARE_BRACKETS, "[" },  { type::RIGHT_SQUARE_BRACKETS, "]" },
-			{ type::LEFT_CURLY_BRACKETS, "{" },   { type::RIGHT_CURLY_BRACKETS, "}" },
+		/* numeric type */
+		{ type::BOOLEAN, "bool" }, { type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
+		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" }, { type::F64, "f64" },
+
+		/* special keyword */
+		{ type::TRUE, "true" }, { type::FALSE, "false" },
+		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
+
+		/* other operator */
+		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
+		{ type::QUESTION, "?" }, { type::COLON, ":" },
+		{ type::MEMBER_ACCESS, "->" },
+		{ type::SIZEOF, "sizeof" },
+		{ type::LEFT_PARENTHESIS, "(" },      { type::RIGHT_PARENTHESIS, ")" },
+		{ type::LEFT_SQUARE_BRACKETS, "[" },  { type::RIGHT_SQUARE_BRACKETS, "]" },
+		{ type::LEFT_CURLY_BRACKETS, "{" },   { type::RIGHT_CURLY_BRACKETS, "}" },
 
 	};
-
 
 
 	/*
@@ -129,10 +181,11 @@ namespace Mini_C::lexer
 	 *     size      :  actual amounts of char to be processed.
 	 *
 	 * Return value:
-	 *     return a vector with tokens, then
+	 *     return a vector with tokens, otherwise the error message.
 	 *
 	 * Exception:
-	 *     throw Token_Ex, which implies 'error message' and 'position'.
+	 *     No exception thrown, all exception should be diagnoed innerly,
+	 *     and return error message if possible.
 	 *
 	 */
 	namespace analyzers
