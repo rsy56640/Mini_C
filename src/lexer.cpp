@@ -38,7 +38,7 @@ namespace Mini_C::lexer::analyzers {
 
     namespace supporters {
         const static unordered_set<char> combindableOperatorSet = {
-                '|', '&', '+', '^', '*', '/', '!', '.', ':', '=', '<', '>'
+                '|', '&', '+', '^', '*', '/', '!', '.', ':', '=', '<', '>', '%'
         };
         const static unordered_set<char> singleOperatorSet = {
                 '(', ')', '{', '}', '[', ']', ';', ',', '?'
@@ -79,6 +79,8 @@ namespace Mini_C::lexer::analyzers {
                 type::SELF_INC, type::SELF_DEC, type::RIGHT_PARENTHESIS, type::RIGHT_SQUARE_BRACKETS, type::RIGHT_CURLY_BRACKETS
         };
         bool rIsInUnminusableSituation(vector<token_t> &r) {
+            if (!r.size())
+                return true;
             auto&& rb = r.back();
             return std::visit([&](auto&& r)->bool {
                 using t = std::decay_t<decltype(r)>;
@@ -304,7 +306,7 @@ namespace Mini_C::lexer::analyzers {
                     break;
             }
 
-            r.push_back(make_tuple(value, type));
+            r.push_back(make_tuple((isMinus ? -value : value), type));
         };
 
 
@@ -395,18 +397,6 @@ analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculato
 };
 namespace Mini_C::lexer
 {
-	std::string type2str(type _type)
-	{
-		auto it = keyword2str.find(_type);
-		if (it == keyword2str.end())return "No such type";
-		return it->second;
-	}
-	type num_t2type(numeric_type num_t) {
-		return static_cast<type>(static_cast<std::size_t>(type::CHAR)
-			+ static_cast<std::size_t>(num_t) - static_cast<std::size_t>(numeric_type::CHAR));
-	}
-
-
     std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) {
         vector<token_t> r;
         bool ok;
