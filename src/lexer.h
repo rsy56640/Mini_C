@@ -22,6 +22,8 @@ namespace Mini_C::lexer
 	 * TODO: type promotion when different numeric type in arithmetic operation.
 	 *       So maybe some tactic(such as bit operation) can be used here,
 	 *       and the value should be designed carefully.
+	 *
+	 * Promise: The order of `numeric_type` is same in `type`.
 	 */
 	enum class numeric_type { CHAR, I16, I32, U16, U32, F32, F64 };
 	using numeric_t = std::tuple<double, numeric_type>;
@@ -52,6 +54,14 @@ namespace Mini_C::lexer
 		LEFT_CURLY_BRACKETS, RIGHT_CURLY_BRACKETS,   // curly brackets   : "{", "}"
 
 	};
+
+	type num_t2type(numeric_type num_t);
+	/*
+	inline numeric_type type2num_t(type _t) {
+		return static_cast<numeric_type>(static_cast<std::size_t>(numeric_type::CHAR)
+			+ static_cast<std::size_t>(_t) - static_cast<std::size_t>(type::CHAR));
+	}*/
+
 	static const std::unordered_map<std::string, type> keywords =
 	{
 		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },
@@ -67,6 +77,25 @@ namespace Mini_C::lexer
 		{ "{", type::LEFT_CURLY_BRACKETS },   { "}", type::RIGHT_CURLY_BRACKETS },
 
 	};
+
+	// for display
+	std::string type2str(type _type);
+	static const std::unordered_map<type, std::string> keyword2str =
+	{
+		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  },
+		{ type::SELF_INC, "++" }, { type::SELF_DEC, "--" },
+
+
+		{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
+		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" },{ type::F64, "f64" },
+
+		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
+		{ type::LEFT_PARENTHESIS, "("  },      { type::RIGHT_PARENTHESIS, ")" },
+		{ type::LEFT_SQUARE_BRACKETS, "["  },  { type::RIGHT_SQUARE_BRACKETS, "]" },
+		{ type::LEFT_CURLY_BRACKETS, "{"  },   { type::RIGHT_CURLY_BRACKETS, "}" },
+
+	};
+
 
 
 	/*
