@@ -88,7 +88,7 @@ namespace Mini_C::lexer
 	static const std::unordered_map<std::string, type> keywords =
 	{
 		/* arithmetic operator */
-		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },{ "%", type::MOD },
+		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV }, { "%", type::MOD },
 		{ "<<", type::LEFT_SHIFT }, { ">>", type::RIGHT_SHIFT },
 		{ "~", type::NOT }, { "&", type::AND }, { "|", type::OR }, { "^", type::XOR },
 
@@ -134,7 +134,7 @@ namespace Mini_C::lexer
 	static const std::unordered_map<type, std::string> keyword2str =
 	{
 		/* arithmetic operator */
-		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  }, { type::MOD, "%" },
+		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  }, { type::DIV, "/",  }, { type::MOD, "%" },
 		{ type::LEFT_SHIFT, "<<" }, { type::RIGHT_SHIFT, ">>" },
 		{ type::NOT, "~" }, { type::AND, "&" }, { type::OR, "|" }, { type::XOR, "^" },
 
