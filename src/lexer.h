@@ -42,7 +42,7 @@ namespace Mini_C::lexer
 	 */
 	enum class type
 	{
-		ADD, SUB, MUL, DIV,
+		ADD, SUB, MUL, DIV, MOD,
 		SELF_INC, SELF_DEC,
 
 		EQ, NEQ,
@@ -71,7 +71,7 @@ namespace Mini_C::lexer
 
 	static const std::unordered_map<std::string, type> keywords =
 	{
-		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },
+		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },{ "%", type::MOD },
 		{ "++", type::SELF_INC }, { "--", type::SELF_DEC },
 
 		{ "=", type::EQ }, { "!=", type::NEQ },
@@ -97,7 +97,7 @@ namespace Mini_C::lexer
 	std::string type2str(type _type);
 	static const std::unordered_map<type, std::string> keyword2str =
 	{
-		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  },
+		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  }, { type::MOD, "%" },
 		{ type::SELF_INC, "++" }, { type::SELF_DEC, "--" },
 
 		{ type::EQ , "=" }, { type::NEQ, "!=" },
