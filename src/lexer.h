@@ -129,10 +129,10 @@ namespace Mini_C::lexer
 	 *     size      :  actual amounts of char to be processed.
 	 *
 	 * Return value:
-	 *     return a vector with tokens, then
+	 *     return a `vector<Token>` with tokens, otherwise `Token_Ex` if some error happens.
 	 *
 	 * Exception:
-	 *     throw Token_Ex, which implies 'error message' and 'position'.
+	 *     No exception throwed from the function.
 	 *
 	 */
 	namespace analyzers
