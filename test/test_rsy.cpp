@@ -57,7 +57,7 @@ void test_lexer(const char* s, const std::size_t line_num)
 			[](const std::vector<Mini_C::lexer::token_t>& tokens) {
 			for (auto const& token : tokens)
 				std::visit(overloaded{
-				[](const Mini_C::lexer::type& _type) { std::cout << "type: " << Mini_C::lexer::type2str(_type) << std::endl; },
+				[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
 				[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
 				[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " " << std::get<double>(_num) << std::endl; },
 				[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },

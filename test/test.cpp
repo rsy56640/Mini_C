@@ -20,7 +20,7 @@ void outputLexVector(std::variant<std::vector<token_t>, analyzers::Token_Ex> &r)
 			[](const std::vector<token_t>& tokens) {
 			for (auto const& token : tokens)
 				std::visit(overloaded{
-				[](const Mini_C::lexer::type& _type) { std::cout << "type: " << type2str(_type) << std::endl; },
+				[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(type2str(_type)) << std::endl; },
 				[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
 				[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(type2str(num_t2type(std::get<numeric_type>(_num)))) << " " << std::get<double>(_num) << std::endl; },
 				[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
