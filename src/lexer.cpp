@@ -343,7 +343,7 @@ namespace Mini_C::lexer::analyzers {
 		}
 		else if (c == '<' || c == '>')
 			if (c == s[pos])
-				r.push_back(keywords.find(string(2, s[pos]))->second);
+                r.push_back(keywords.find(string(2, s[pos++]))->second); // here must have a pos++ to let the pointer point to the next position, otherwise, the second reasonable '<'/'>' must be judge as exception
 			else
 				throw Token_Ex("not a valid operator.", pos - 1);
 		else if (supporters::isInCalculatorNormalOperatorCharSet(c))
