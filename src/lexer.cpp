@@ -121,7 +121,7 @@ namespace Mini_C::lexer::analyzers {
 
         // unnecessity
         // follow numbers
-        const static unordered_set<char> followNumberCharSet = { '+', '-', '*', '/', ')', ']', '}', '|', '&', '^', ',', ':', ';' };
+        const static unordered_set<char> followNumberCharSet = { '+', '-', '*', '/', ')', ']', '}', '|', '&', '^', ',', ':', ';', '%' };
         inline bool canFollowNumber(char c) {
             return followNumberCharSet.find(c) != followNumberCharSet.end();
         }
