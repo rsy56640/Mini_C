@@ -478,13 +478,15 @@ namespace Mini_C::lexer::analyzers {
     // end for calculator
 #undef write_analyzer
 }
-const int analyzerNum = 5; //5 in normal, 1 in calculator
+const int analyzerNum = 7; //7 in normal, 1 in calculator
 analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
         analyzers::word_analyzer,
         analyzers::number_analyzer,
         analyzers::minus_analyzer,
         analyzers::single_symbol_analyzer,
         analyzers::combindable_operator_analyzer,
+        analyzers::char_analyzer,
+        analyzers::string_analyzer,
 };
 namespace Mini_C::lexer
 {
