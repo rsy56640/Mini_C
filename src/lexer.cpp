@@ -93,7 +93,7 @@ namespace Mini_C::lexer::analyzers {
         };
         bool rIsInUnminusableSituation(vector<token_t> &r) {
             if (!r.size())
-                return true;
+                return false;
             auto&& rb = r.back();
             return std::visit([&](auto&& r)->bool {
                 using t = std::decay_t<decltype(r)>;
@@ -146,7 +146,12 @@ namespace Mini_C::lexer::analyzers {
         string ns(s + pos, length);
         keyword_it it = keywords.find(ns);
         if (it != keywords.end())
-            r.push_back(it->second);
+            if (it->second == type::TRUE)
+                r.push_back(make_tuple(1.0, numeric_type::BOOLEAN));
+            else if (it->second == type::FALSE)
+                r.push_back(make_tuple(0.0, numeric_type::BOOLEAN));
+            else
+                r.push_back(it->second);
         else
             r.push_back(std::move(ns));
 
