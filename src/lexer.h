@@ -45,6 +45,9 @@ namespace Mini_C::lexer
 		ADD, SUB, MUL, DIV,
 		SELF_INC, SELF_DEC,
 
+		EQ, NEQ,
+		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ,
+
 		CHAR, I16, I32,
 		U16, U32, F32, F64,
 
@@ -67,6 +70,8 @@ namespace Mini_C::lexer
 		{ "+", type::ADD }, { "-", type::SUB }, { "*", type::MUL }, { "/", type::DIV },
 		{ "++", type::SELF_INC }, { "--", type::SELF_DEC },
 
+		{ "=", type::EQ }, { "!=", type::NEQ },
+		{ "+=", type::ADD_EQ }, { "-=", type::SUB_EQ }, { "*=", type::MUL_EQ }, { "/=", type::DIV_EQ },
 
 		{ "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
 		{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
@@ -84,6 +89,9 @@ namespace Mini_C::lexer
 	{
 		{ type::ADD, "+" }, { type::SUB, "-" }, { type::MUL, "*",  },{ type::DIV, "/",  },
 		{ type::SELF_INC, "++" }, { type::SELF_DEC, "--" },
+
+		{ type::EQ , "=" }, { type::NEQ, "!=" },
+		{ type::ADD_EQ, "+=" }, { type::SUB_EQ, "-=" }, { type::MUL_EQ, "*=" }, { type::DIV_EQ, "/=" },
 
 
 		{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
