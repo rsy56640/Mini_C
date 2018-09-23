@@ -84,8 +84,6 @@ namespace Mini_C::lexer
 
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
 
-
-
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
 		{ "(", type::LEFT_PARENTHESIS },      { ")", type::RIGHT_PARENTHESIS },
 		{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
@@ -103,19 +101,17 @@ namespace Mini_C::lexer
 		{ type::EQ , "=" }, { type::NEQ, "!=" },
 		{ type::ADD_EQ, "+=" }, { type::SUB_EQ, "-=" }, { type::MUL_EQ, "*=" }, { type::DIV_EQ, "/=" },
 
-
-		{ type::BOOL, "bool" },{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
-		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" },{ type::F64, "f64" },
+		{ type::BOOL, "bool" }, { type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
+		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" }, { type::F64, "f64" },
 
 		{ type::TRUE, "true" }, { type::FALSE, "false" },
 
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 
-
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
-		{ type::LEFT_PARENTHESIS, "("  },      { type::RIGHT_PARENTHESIS, ")" },
-		{ type::LEFT_SQUARE_BRACKETS, "["  },  { type::RIGHT_SQUARE_BRACKETS, "]" },
-		{ type::LEFT_CURLY_BRACKETS, "{"  },   { type::RIGHT_CURLY_BRACKETS, "}" },
+		{ type::LEFT_PARENTHESIS, "(" },      { type::RIGHT_PARENTHESIS, ")" },
+		{ type::LEFT_SQUARE_BRACKETS, "[" },  { type::RIGHT_SQUARE_BRACKETS, "]" },
+		{ type::LEFT_CURLY_BRACKETS, "{" },   { type::RIGHT_CURLY_BRACKETS, "}" },
 
 	};
 
