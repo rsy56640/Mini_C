@@ -59,7 +59,7 @@ namespace Mini_C::lexer
 
 		/* assign operator */
 		ASSIGN,                                     // =
-		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ, MOD_EQ,     // += -= *= /=
+		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ, MOD_EQ,     // += -= *= /= %=
 		L_SHIFT_EQ, R_SHIFT_EQ,                     // <<= >>=
 		AND_EQ, OR_EQ, XOR_EQ,                      // &= |=
 
