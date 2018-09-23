@@ -28,6 +28,19 @@ using keyword_it = unordered_map<string, type>::const_iterator;
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
+namespace Mini_C::lexer {
+    std::string type2str(type _type)
+    {
+        auto it = keyword2str.find(_type);
+        if (it == keyword2str.end())return "No such type";
+        return it->second;
+    }
+    type num_t2type(numeric_type num_t) {
+        return static_cast<type>(static_cast<std::size_t>(type::CHAR)
+                                 + static_cast<std::size_t>(num_t) - static_cast<std::size_t>(numeric_type::CHAR));
+    }
+}
+
 /**
  * analyzers
  */
