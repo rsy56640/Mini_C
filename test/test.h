@@ -16,10 +16,19 @@ using std::endl;
 using std::cin;
 using namespace Mini_C::lexer;
 
+namespace TEST
+{
 
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
+	template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+	template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
-void outputLexVector(std::variant<std::vector<token_t>, analyzers::Token_Ex> &r);
+	namespace TEST_LEXER
+	{
+		void test_lexer(const char* s, const std::size_t line_num);
+		void num_print(const Mini_C::lexer::numeric_t& _num);
+		void outputLexVector(const std::variant<std::vector<token_t>, analyzers::Token_Ex> &result,
+			const std::size_t line_num);
+	}
 
+}
 #endif /* test_hpp */

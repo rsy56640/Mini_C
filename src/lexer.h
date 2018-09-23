@@ -51,6 +51,8 @@ namespace Mini_C::lexer
 		CHAR, I16, I32,
 		U16, U32, F32, F64,
 
+		STRUCT, STR, FN, VOID,
+
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
 		LEFT_PARENTHESIS, RIGHT_PARENTHESIS,         // parenthesis      : "(", ")"
 		LEFT_SQUARE_BRACKETS, RIGHT_SQUARE_BRACKETS, // square brackets  : "[", "]"
@@ -76,6 +78,10 @@ namespace Mini_C::lexer
 		{ "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
 		{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
 
+		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
+
+
+
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
 		{ "(", type::LEFT_PARENTHESIS },      { ")", type::RIGHT_PARENTHESIS },
 		{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
@@ -96,6 +102,9 @@ namespace Mini_C::lexer
 
 		{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
 		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" },{ type::F64, "f64" },
+
+		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
+
 
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
 		{ type::LEFT_PARENTHESIS, "("  },      { type::RIGHT_PARENTHESIS, ")" },
