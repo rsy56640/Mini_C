@@ -70,6 +70,8 @@ namespace Mini_C::lexer
 		/* special keyword */
 		TRUE, FALSE,
 		STRUCT, STR, FN, VOID,
+		STATIC, CONST,
+		USING,
 
 		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
@@ -113,6 +115,8 @@ namespace Mini_C::lexer
 		/* special keyword */
 		{ "true", type::TRUE }, { "false", type::FALSE },
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
+		{ "static", type::STATIC }, { "const", type::CONST },
+		{ "using", type::USING },
 
 		/* other operator */
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
@@ -156,6 +160,8 @@ namespace Mini_C::lexer
 		/* special keyword */
 		{ type::TRUE, "true" }, { type::FALSE, "false" },
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
+		{ type::STATIC, "static" }, { type::CONST, "const" },
+		{ type::USING, "using" },
 
 		/* other operator */
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
