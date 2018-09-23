@@ -50,6 +50,9 @@ namespace Mini_C::lexer::analyzers {
     using analyzer = function<bool(const char *, size_t&, const size_t, vector<token_t> &)>;
 
     namespace supporters {
+        const static unordered_map<char, char> escapingMap = {
+                { 't', '\t' }, { 'n', '\n' }, { 'r', '\r' }, { 'a', '\a' }, { 'b', '\b' }, { 'f', '\f' }
+        };
         const static unordered_set<char> combindableOperatorSet = {
                 '|', '&', '+', '^', '*', '/', '!', '.', ':', '=', '<', '>', '%'
         };
@@ -62,7 +65,13 @@ namespace Mini_C::lexer::analyzers {
         const static unordered_set<char> dividerCharSet = {
                 ' ', '\n', '\t'
         };
+        const static unordered_set<char> minusCharSet = {
+                '-', '=', '>'
+        };
 
+        inline bool inMinusCharSet(char c) {
+            return minusCharSet.find(c) != minusCharSet.end();
+        }
         inline bool isDivider(char c) {
             return dividerCharSet.find(c) != dividerCharSet.end();
         }
@@ -86,6 +95,9 @@ namespace Mini_C::lexer::analyzers {
         }
         inline bool isSecondCombinableOpearatorChar(char c) {
             return secondCombinableOperatorSet.find(c) != secondCombinableOperatorSet.end();
+        }
+        inline bool isOctNum(char c) {
+            return c >= '0' && c <= '7';
         }
 
         const static unordered_set<type> unminusable_type_corresponding_string = {
@@ -191,14 +203,63 @@ namespace Mini_C::lexer::analyzers {
         return true;
     }
 
+    // returns the char value in int
+    int escapeTackle(const char *s, size_t& pos, const size_t size, vector<token_t> &r) {
+
+        int value = 0;
+
+        auto octNumTackle = [&]() {
+            value = s[pos++];
+            // here pos is in first number
+            for (size_t begin = pos; supporters::isOctNum(s[pos]) && pos < begin + 2; ++pos)
+                value = value * 8 + (s[pos] - '0');
+        };
+
+        auto hexNumTackle = [&]() {
+            // here pos is in 'x'
+            if (!supporters::isHex(s[++pos])) { // point to and get char next to 'x'
+                value = 'x';
+                return;
+            }
+            value = supporters::turnHex(s[pos++]);
+            for (size_t begin = pos; supporters::isHex(s[pos]) && pos < begin + 1; pos++)
+                value = value * 16 + supporters::turnHex(s[pos]);
+        };
+
+        auto charTackle = [&]() {
+            char c = s[pos++]; // no need to point to next in the following
+            unordered_map<char, char>::const_iterator p = supporters::escapingMap.find(c);
+            if (p != supporters::escapingMap.end())
+                value = p->second;
+            else // like \', \", \\ that's just the same with '\c' which means 'c' itself
+                value = c;
+        };
+
+        ++pos;
+        char c = s[pos];
+        if (supporters::isOctNum(c))
+            octNumTackle();
+        else if (c == 'x')
+            hexNumTackle();
+        else
+            charTackle();
+
+
+        return value;
+    }
+
     write_analyzer(char_analyzer) {
         if (s[pos] != '\'')
             return false;
 
-        // while reading, '\'' is as a whole, which means '\n' is a single char not 2 chars
-        if (pos + 2 >= size || s[pos] != '\'')
+        if (s[++pos] == '\\') {
+            r.push_back(make_tuple((double)escapeTackle(s, pos, size, r), numeric_type::CHAR));
+            return true;
+        }
+
+        if (pos + 1 >= size || s[pos + 1] != '\'')
             throw Token_Ex("there should be only one character in \'\'", pos);
-        r.push_back(std::make_tuple((double)s[++pos], numeric_type::CHAR));
+        r.push_back(std::make_tuple((double)s[pos], numeric_type::CHAR));
         pos += 2;
 
         return true;
@@ -208,7 +269,18 @@ namespace Mini_C::lexer::analyzers {
         if (s[pos] != '"')
             return false;
 
+        string ns;
 
+        for (++pos; pos < size && s[pos] != '"'; ++pos)
+            if (s[pos] == '\\')
+                ns += (char)escapeTackle(s, pos, size, r);
+            else
+                ns += s[pos];
+
+        if (pos == size)
+            throw Token_Ex("expected a corresponding '\"'", pos);
+
+        r.push_back(make_tuple(ns));
 
 
         return true;
@@ -365,11 +437,12 @@ namespace Mini_C::lexer::analyzers {
         else
             // there exists divider(s) or it's the end, or it could not be
             // a reasonable char
-        if (begin != pos - 1 || pos == size ||
-            (s[pos] != '-' && s[pos] != '='))
+        if (begin != pos - 1 || pos == size || supporters::inMinusCharSet(s[pos]))
             r.push_back(keywords.find("-")->second);
-        else //pos == begin + 1
+        else { //pos == begin + 1
             r.push_back(keywords.find(string(s + begin, 2))->second);
+            ++pos; // for when leaving the function, pos should always be in the position of the next char to be identified
+        }
 
         return true;
     }
@@ -405,13 +478,15 @@ namespace Mini_C::lexer::analyzers {
     // end for calculator
 #undef write_analyzer
 }
-const int analyzerNum = 5; //5 in normal, 1 in calculator
+const int analyzerNum = 7; //7 in normal, 1 in calculator
 analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
         analyzers::word_analyzer,
         analyzers::number_analyzer,
         analyzers::minus_analyzer,
         analyzers::single_symbol_analyzer,
         analyzers::combindable_operator_analyzer,
+        analyzers::char_analyzer,
+        analyzers::string_analyzer,
 };
 namespace Mini_C::lexer
 {
