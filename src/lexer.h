@@ -18,14 +18,14 @@ namespace Mini_C::lexer
 
 
 	/*
-	 * represent char, i16, i32, u16, u32, f32, f64
+	 * represent bool, char, i16, i32, u16, u32, f32, f64
 	 * TODO: type promotion when different numeric type in arithmetic operation.
 	 *       So maybe some tactic(such as bit operation) can be used here,
 	 *       and the value should be designed carefully.
 	 *
 	 * Promise: The order of `numeric_type` is same in `type`.
 	 */
-	enum class numeric_type { CHAR, I16, I32, U16, U32, F32, F64 };
+	enum class numeric_type { BOOL, CHAR, I16, I32, U16, U32, F32, F64 };
 	using numeric_t = std::tuple<double, numeric_type>;
 
 
@@ -48,8 +48,10 @@ namespace Mini_C::lexer
 		EQ, NEQ,
 		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ,
 
-		CHAR, I16, I32,
+		BOOL, CHAR, I16, I32,
 		U16, U32, F32, F64,
+
+		TRUE, FALSE,
 
 		STRUCT, STR, FN, VOID,
 
@@ -75,8 +77,10 @@ namespace Mini_C::lexer
 		{ "=", type::EQ }, { "!=", type::NEQ },
 		{ "+=", type::ADD_EQ }, { "-=", type::SUB_EQ }, { "*=", type::MUL_EQ }, { "/=", type::DIV_EQ },
 
-		{ "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
+		{ "bool", type::BOOL }, { "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
 		{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
+
+		{ "true", type::TRUE }, { "false", type::FALSE },
 
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
 
@@ -100,8 +104,10 @@ namespace Mini_C::lexer
 		{ type::ADD_EQ, "+=" }, { type::SUB_EQ, "-=" }, { type::MUL_EQ, "*=" }, { type::DIV_EQ, "/=" },
 
 
-		{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
+		{ type::BOOL, "bool" },{ type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
 		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" },{ type::F64, "f64" },
+
+		{ type::TRUE, "true" }, { type::FALSE, "false" },
 
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 

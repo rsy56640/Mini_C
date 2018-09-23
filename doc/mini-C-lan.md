@@ -21,7 +21,7 @@ Syntax:
 - basic type
     - `char`
     - `bool`
-    - `i32`, `i64`, `u32`, `u64`
+    - `i16`, `i32`, `u16`, `u32`
     - `f32`, `f64`
 - [enumerated type](#)
 - derived type
@@ -161,6 +161,27 @@ Note: If the type of the expression is different from the return type of the fun
 
 
 
+
+
+
+&nbsp;   
+&nbsp;   
+## Function
+
+### function definition
+
+`fn [return_type] [function_name] ([parameter-list]) [body]`   
+e.g.  
+
+    fn void foo(i32 i, str s)
+    {
+        //...
+    }
+    
+    fn const i32 goo()
+    {
+        return 27;
+    }
 
 
 
