@@ -41,7 +41,7 @@ namespace TEST
 				std::cout << static_cast<std::size_t>(std::get<double>(_num));
 			else if (num_t == Mini_C::lexer::numeric_type::F32 || num_t == Mini_C::lexer::numeric_type::F64)
 				printf("%lf", std::get<double>(_num));
-			else if (num_t == Mini_C::lexer::numeric_type::BOOL)
+			else if (num_t == Mini_C::lexer::numeric_type::BOOLEAN)
 				std::cout << static_cast<std::size_t>(std::get<double>(_num)) ? "true" : "false";
 			else std::cout << static_cast<int>(std::get<double>(_num));
 		}
