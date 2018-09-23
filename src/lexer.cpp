@@ -222,7 +222,7 @@ namespace Mini_C::lexer::analyzers {
                 return;
             }
             value = supporters::turnHex(s[pos++]);
-            for (size_t begin = pos; supporters::isHex(s[pos]) && pos < begin + 3; pos++)
+            for (size_t begin = pos; supporters::isHex(s[pos]) && pos < begin + 1; pos++)
                 value = value * 16 + supporters::turnHex(s[pos]);
         };
 
