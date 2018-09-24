@@ -84,7 +84,7 @@ namespace Mini_C::lexer
 
 	};
 
-	type num_t2type(numeric_type num_t);
+	type num_t2type(numeric_type num_t) noexcept;
 	static const std::unordered_map<std::string, type> keywords =
 	{
 		/* arithmetic operator */
@@ -130,7 +130,7 @@ namespace Mini_C::lexer
 	};
 
 	// for display
-	std::string type2str(type _type);
+	std::string type2str(type _type) noexcept;
 	static const std::unordered_map<type, std::string> keyword2str =
 	{
 		/* arithmetic operator */
@@ -206,7 +206,7 @@ namespace Mini_C::lexer
 				:_msg(std::move(msg)), _position(position) {}
 		};
 	}
-	std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char* s, const std::size_t size);
+	std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char* s, const std::size_t size) noexcept;
 
 
 }// end namespace Mini_C::lexer
