@@ -329,15 +329,25 @@ namespace Mini_C::lexer::analyzers {
                 auto f64Analyzer = [&]() {
                     // here pos is where e/E appears
                     ++pos;
-                    if (s[pos] != '-' && !supporters::isNum(s[pos]))
-                        generateNumberException();
-
-                    int right = 0;
                     bool rminus = false;
                     if (s[pos] == '-') {
                         rminus = true;
                         ++pos;
                     }
+                    if (!supporters::isNum(s[pos]))
+                        generateNumberException();
+
+//                    if (s[pos] != '-' && !supporters::isNum(s[pos]))
+//                        generateNumberException();
+//
+//                    int right = 0;
+//                    bool rminus = false;
+//                    if (s[pos] == '-') {
+//                        rminus = true;
+//                        ++pos;
+//                    }
+
+                    int right = (s[pos] - '0');
                     type = numeric_type::F64;
 
                     while (true)
@@ -456,7 +466,7 @@ namespace Mini_C::lexer::analyzers {
         char c = s[pos++];
         if (c == '-') {
             // to the next meaningful char
-            while (++pos < size && supporters::isDivider(s[pos]));
+            while (supporters::isDivider(s[pos])) ++pos;
             // see if it's minus
             if (supporters::isNumBegin(s[pos]) && !supporters::rIsInUnminusableSituation(r))
                 return inner_number_analyzer(s, pos, size, r, true);
@@ -478,15 +488,16 @@ namespace Mini_C::lexer::analyzers {
     // end for calculator
 #undef write_analyzer
 }
-const int analyzerNum = 7; //7 in normal, 1 in calculator
+const int analyzerNum = 1; //7 in normal, 1 in calculator
 analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
-        analyzers::word_analyzer,
-        analyzers::number_analyzer,
-        analyzers::minus_analyzer,
-        analyzers::single_symbol_analyzer,
-        analyzers::combindable_operator_analyzer,
-        analyzers::char_analyzer,
-        analyzers::string_analyzer,
+//    analyzers::word_analyzer,
+//    analyzers::number_analyzer,
+//    analyzers::minus_analyzer,
+//    analyzers::single_symbol_analyzer,
+//    analyzers::combindable_operator_analyzer,
+//    analyzers::char_analyzer,
+//    analyzers::string_analyzer,
+        analyzers::calculator_analyzer,
 };
 namespace Mini_C::lexer
 {
