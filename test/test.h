@@ -10,6 +10,7 @@
 #define test_hpp
 
 #include "../src/lexer.h"
+#include "../util/pattern.hpp"
 #include <iostream>
 using std::cout;
 using std::endl;
