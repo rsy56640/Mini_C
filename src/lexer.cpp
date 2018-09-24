@@ -334,9 +334,11 @@ namespace Mini_C::lexer::analyzers {
                         rminus = true;
                         ++pos;
                     }
+                    // for '\0' is definitely not num, no need to check the boundary
                     if (!supporters::isNum(s[pos]))
                         generateNumberException();
 
+                    // previous(wrong) implemetation
 //                    if (s[pos] != '-' && !supporters::isNum(s[pos]))
 //                        generateNumberException();
 //
