@@ -31,16 +31,28 @@ namespace TEST
 									[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
 									[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
 							}, token); },
-			}, result);
+				}, result);
 		}
 
-		void num_print(const Mini_C::lexer::numeric_t& _num)
+		const static std::unordered_map<char, std::string> escapingMap = {
+			{ '\t', "'\\t'" }, { '\n', "'\\n'" }, { '\r', "'\\r'" },
+			{ '\a', "'\\a'" }, { '\b', "'\\b'" }, { '\f', "'\\f'" },
+		};
+
+		void num_print(const Mini_C::lexer::numeric_t& _num) noexcept
 		{
 			Mini_C::lexer::numeric_type num_t = std::get<Mini_C::lexer::numeric_type>(_num);
 			if (num_t == Mini_C::lexer::numeric_type::U32)
 				std::cout << static_cast<std::size_t>(std::get<double>(_num));
 			else if (num_t == Mini_C::lexer::numeric_type::F32 || num_t == Mini_C::lexer::numeric_type::F64)
 				printf("%lf", std::get<double>(_num));
+			else if (num_t == Mini_C::lexer::numeric_type::CHAR)
+			{
+				const char c = static_cast<char>(std::get<double>(_num));
+				if (auto it = escapingMap.find(c); it != escapingMap.end())
+					std::cout << it->second;
+				else std::cout << std::string("'") + c + "'";
+			}
 			else if (num_t == Mini_C::lexer::numeric_type::BOOLEAN)
 				std::cout << (static_cast<std::size_t>(std::get<double>(_num)) ? "true" : "false");
 			else std::cout << static_cast<int>(std::get<double>(_num));
