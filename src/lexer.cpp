@@ -442,7 +442,8 @@ namespace Mini_C::lexer::analyzers {
     }
 
     write_analyzer(number_analyzer) {
-        if ((s[pos] == '.' && [&](){
+        if ((s[pos] == '.' && [=](){
+            // find out if the next meaningful char is number, note that '_' is not meaningful in number
             size_t i = pos + 1; while (s[i] == '_') ++i; return !supporters::isNum(s[i]);
         }()) ||
             !supporters::isNum(s[pos])
