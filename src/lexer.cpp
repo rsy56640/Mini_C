@@ -401,6 +401,7 @@ namespace Mini_C::lexer::analyzers {
                 else if (c == 'u' || c == 'U') {
                     if (isMinus)
                         generateNumberException();
+                    ++pos;
                     type = numeric_type::U32;
                     break;
                 }
