@@ -442,7 +442,11 @@ namespace Mini_C::lexer::analyzers {
     }
 
     write_analyzer(number_analyzer) {
-        if (!supporters::isNumBegin(s[pos]))
+        if ((s[pos] == '.' && [&](){
+            size_t i = pos + 1; while (s[i] == '_') ++i; return !supporters::isNum(s[i]);
+        }()) ||
+            !supporters::isNum(s[pos])
+                )
             return false;
 
         return inner_number_analyzer(s, pos, size, r);
