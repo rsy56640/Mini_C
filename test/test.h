@@ -27,7 +27,7 @@ namespace TEST
 	{
 		void test_lexer(const char* s, const std::size_t line_num);
 		void num_print(const Mini_C::lexer::numeric_t& _num) noexcept;
-		void outputLexVector(const std::variant<std::vector<token_t>, analyzers::Token_Ex> &result,
+		void outputLexVector(const tokenize_result &result,
 			const std::size_t line_num);
 	}
 
