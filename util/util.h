@@ -9,8 +9,7 @@ namespace Mini_C::uitl
 
 	void num_print(const Mini_C::lexer::numeric_t& _num) noexcept;
 
-	void outputLexVector(const std::vector<lexer::token_t> &result,
-		const std::size_t line_num) noexcept;
+	void outputLexVector(const std::vector<lexer::token_t> &result, const std::size_t line_num) noexcept;
 
 }
 

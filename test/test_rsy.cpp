@@ -39,7 +39,6 @@ void rsy_test()
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl; }
 }
 
-
 int main()
 {
 	rsy_test();

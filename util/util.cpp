@@ -8,11 +8,11 @@ namespace Mini_C::uitl
 	{
 		for (auto const& token : tokens)
 			std::visit(overloaded{
-			[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
-			[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
-			[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " "; num_print(_num); std::cout << std::endl; },
-			[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
-			[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
+					[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
+					[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
+					[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " "; num_print(_num); std::cout << std::endl; },
+					[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
+					[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
 				}, token);
 	}
 
