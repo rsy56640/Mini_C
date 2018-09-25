@@ -2,9 +2,10 @@
 #include <iostream>
 #include <iomanip>
 
-namespace Mini_C::uitl
+namespace Mini_C::util
 {
-	void outputLexVector(const std::vector<lexer::token_t> &tokens, const std::size_t line_num) noexcept
+
+	void outputLexVector(const std::vector<lexer::token_t> &tokens) noexcept
 	{
 		for (auto const& token : tokens)
 			std::visit(overloaded{
