@@ -15,23 +15,16 @@ namespace TEST
 
 	namespace TEST_LEXER
 	{
-		void outputLexVector(const tokenize_result &result, const std::size_t line_num)
+		void outputLexVector(const std::vector<token_t> &tokens, const std::size_t line_num) noexcept
 		{
-			std::visit(overloaded{
-					[line_num](const Mini_C::lexer::analyzers::Token_Ex& e) {
-						throw Mini_C::MiniC_Universal_Exception{
-								std::move(const_cast<Mini_C::lexer::analyzers::Token_Ex&>(e)._msg),
-								line_num, e._position }; },
-					[](const std::vector<Mini_C::lexer::token_t>& tokens) {
-						for (auto const& token : tokens)
-							std::visit(overloaded{
-									[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
-									[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
-									[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " "; num_print(_num); std::cout << std::endl; },
-									[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
-									[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
-							}, token); },
-				}, result);
+			for (auto const& token : tokens)
+				std::visit(overloaded{
+						[](const Mini_C::lexer::type& _type) { std::cout << "type: " << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
+						[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << _identifier << std::endl; },
+						[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " "; num_print(_num); std::cout << std::endl; },
+						[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
+						[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
+					}, token);
 		}
 
 		const static std::unordered_map<char, std::string> escapingMap = {
@@ -61,9 +54,15 @@ namespace TEST
 		void test_lexer(const char* s, const std::size_t line_num)
 		{
 			auto result = Mini_C::lexer::tokenize(s, strlen(s));
-			outputLexVector(result, line_num);
+			std::visit(overloaded{
+				[line_num](const Mini_C::lexer::analyzers::Token_Ex& e) {
+					throw Mini_C::MiniC_Universal_Exception{
+						std::move(const_cast<Mini_C::lexer::analyzers::Token_Ex&>(e)._msg),
+						line_num, e._position }; },
+				[line_num](const std::vector<Mini_C::lexer::token_t>& tokens) {outputLexVector(tokens, line_num); },
+				}, result);
 		}
-	}
 
+	}
 
 }// end namespace TEST

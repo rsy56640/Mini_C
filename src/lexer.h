@@ -211,6 +211,4 @@ namespace Mini_C::lexer
 
 }// end namespace Mini_C::lexer
 
-using tokenize_result = std::variant<std::vector<Mini_C::lexer::token_t>, Mini_C::lexer::analyzers::Token_Ex>;
-
 #endif // !_LEXER_H
