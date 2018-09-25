@@ -502,8 +502,15 @@ namespace Mini_C::lexer::analyzers {
     // end for calculator
 #undef write_analyzer
 }
+
+#ifdef TEST_CALC
+constexpr int analyzerNum = 1; //7 in normal, 1 in calculator
+analyzers::analyzer analyzer[] = {
+    analyzers::calculator_analyzer,
+};
+#else
 constexpr int analyzerNum = 7; //7 in normal, 1 in calculator
-analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
+analyzers::analyzer analyzer[] = {
         analyzers::word_analyzer,
         analyzers::number_analyzer,
         analyzers::minus_analyzer,
@@ -511,8 +518,8 @@ analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculato
         analyzers::combindable_operator_analyzer,
         analyzers::char_analyzer,
         analyzers::string_analyzer,
-//    analyzers::calculator_analyzer,
 };
+#endif
 namespace Mini_C::lexer
 {
     std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) noexcept {
