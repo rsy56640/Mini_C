@@ -258,15 +258,19 @@ namespace Mini_C::lexer::analyzers {
         if (s[pos] != '\'')
             return false;
 
-        if (s[++pos] == '\\') {
+        if (++pos == size)
+            throw Token_Ex("expected corresponding \'", pos);
+        if (s[pos] == '\\')
             r.push_back(make_tuple((double)escapeTackle(s, pos, size, r), numeric_type::CHAR));
-            return true;
-        }
+        else
+            r.push_back(make_tuple((double)s[pos++], numeric_type::CHAR));
 
-        if (pos + 1 >= size || s[pos + 1] != '\'')
+        if (s[pos++] != '\'')
             throw Token_Ex("there should be only one character in \'\'", pos);
-        r.push_back(std::make_tuple((double)s[pos], numeric_type::CHAR));
-        pos += 2;
+
+//        if (pos + 1 >= size || s[pos + 1] != '\'')
+//            throw Token_Ex("there should be only one character in \'\'", pos);
+//        pos += 2;
 
         return true;
     }
