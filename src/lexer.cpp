@@ -280,8 +280,9 @@ namespace Mini_C::lexer::analyzers {
         if (pos == size)
             throw Token_Ex("expected a corresponding '\"'", pos);
 
-        r.push_back(make_tuple(ns));
+        r.push_back(make_tuple(std::move(ns)));
 
+        ++pos;
 
         return true;
     }
