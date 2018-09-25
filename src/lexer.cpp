@@ -380,7 +380,10 @@ namespace Mini_C::lexer::analyzers {
                     if (supporters::isNum(c))
                         value += (c - '0') * pow(10, decimal--);
                     else if (c == '_')
-                        continue;
+                        if (s[pos - 1] == '.')
+                            throw Token_Ex("'.' can't be followed by '_'", pos);
+                        else
+                            continue;
                     else if (c == '.')
                         if (!decimal)
                             --decimal;
@@ -442,12 +445,7 @@ namespace Mini_C::lexer::analyzers {
     }
 
     write_analyzer(number_analyzer) {
-        if ((s[pos] == '.' && [=](){
-            // find out if the next meaningful char is number, note that '_' is not meaningful in number
-            size_t i = pos + 1; while (s[i] == '_') ++i; return !supporters::isNum(s[i]);
-        }()) ||
-            !supporters::isNum(s[pos])
-                )
+        if (!(supporters::isNum(s[pos]) || (s[pos] == '.' && supporters::isNum(s[pos + 1]))))
             return false;
 
         return inner_number_analyzer(s, pos, size, r);
