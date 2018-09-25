@@ -23,6 +23,12 @@ namespace TEST
 	template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 	template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
+	/**
+	 * way to test lexical analyzer:
+	 * 		use test_lexer(<your test string>, <a number>);
+	 * 		and result will be output in the console.
+	 * 		watch the console carefully to see if there is anything eccentric.
+	 */
 	namespace TEST_LEXER
 	{
 		void test_lexer(const char* s, const std::size_t line_num);
