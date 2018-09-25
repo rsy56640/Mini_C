@@ -204,8 +204,9 @@ namespace Mini_C::lexer::analyzers {
     }
 
     // returns the char value in int
+    // while entering, pos must in where '\' appears, and when it finish, pos point to the next char to check
     int escapeTackle(const char *s, size_t& pos, const size_t size, vector<token_t> &r) {
-
+        //here pos is in '\'
         int value = 0;
 
         auto octNumTackle = [&]() {
@@ -213,6 +214,7 @@ namespace Mini_C::lexer::analyzers {
             // here pos is in first number
             for (size_t begin = pos; supporters::isOctNum(s[pos]) && pos < begin + 2; ++pos)
                 value = value * 8 + (s[pos] - '0');
+            // here pos is in next char to check
         };
 
         auto hexNumTackle = [&]() {
@@ -224,6 +226,7 @@ namespace Mini_C::lexer::analyzers {
             value = supporters::turnHex(s[pos++]);
             for (size_t begin = pos; supporters::isHex(s[pos]) && pos < begin + 1; pos++)
                 value = value * 16 + supporters::turnHex(s[pos]);
+            // here pos is in next char to check
         };
 
         auto charTackle = [&]() {
@@ -233,9 +236,11 @@ namespace Mini_C::lexer::analyzers {
                 value = p->second;
             else // like \', \", \\ that's just the same with '\c' which means 'c' itself
                 value = c;
+            // here pos is in next char to check
         };
 
         ++pos;
+        // here pos is in meaningful pos next to '\'
         char c = s[pos];
         if (supporters::isOctNum(c))
             octNumTackle();
@@ -246,6 +251,7 @@ namespace Mini_C::lexer::analyzers {
 
 
         return value;
+        // here pos is in next char to check
     }
 
     write_analyzer(char_analyzer) {
@@ -271,11 +277,11 @@ namespace Mini_C::lexer::analyzers {
 
         string ns;
 
-        for (++pos; pos < size && s[pos] != '"'; ++pos)
+        for (++pos; pos < size && s[pos] != '"'; )
             if (s[pos] == '\\')
-                ns += (char)escapeTackle(s, pos, size, r);
+                ns += (char)escapeTackle(s, pos, size, r); // it will point to next char to check
             else
-                ns += s[pos];
+                ns += s[pos++]; // also next char to check
 
         if (pos == size)
             throw Token_Ex("expected a corresponding '\"'", pos);
