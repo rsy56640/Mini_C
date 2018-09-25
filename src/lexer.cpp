@@ -29,13 +29,13 @@ template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
 namespace Mini_C::lexer {
-    std::string type2str(type _type)
+    std::string type2str(type _type) noexcept
     {
         auto it = keyword2str.find(_type);
         if (it == keyword2str.end())return "No such type";
         return it->second;
     }
-    type num_t2type(numeric_type num_t) {
+    type num_t2type(numeric_type num_t) noexcept {
         return static_cast<type>(static_cast<std::size_t>(type::CHAR)
                                  + static_cast<std::size_t>(num_t) - static_cast<std::size_t>(numeric_type::CHAR));
     }
@@ -449,7 +449,7 @@ namespace Mini_C::lexer::analyzers {
         else
             // there exists divider(s) or it's the end, or it could not be
             // a reasonable char
-        if (begin != pos - 1 || pos == size || supporters::inMinusCharSet(s[pos]))
+        if (begin != pos - 1 || pos == size || !supporters::inMinusCharSet(s[pos]))
             r.push_back(keywords.find("-")->second);
         else { //pos == begin + 1
             r.push_back(keywords.find(string(s + begin, 2))->second);
@@ -490,20 +490,20 @@ namespace Mini_C::lexer::analyzers {
     // end for calculator
 #undef write_analyzer
 }
-const int analyzerNum = 7; //7 in normal, 1 in calculator
+constexpr int analyzerNum = 7; //7 in normal, 1 in calculator
 analyzers::analyzer analyzer[] = { //analyzers::calculator_analyzer in calculator
-    analyzers::word_analyzer,
-    analyzers::number_analyzer,
-    analyzers::minus_analyzer,
-    analyzers::single_symbol_analyzer,
-    analyzers::combindable_operator_analyzer,
-    analyzers::char_analyzer,
-    analyzers::string_analyzer,
-//        analyzers::calculator_analyzer,
+        analyzers::word_analyzer,
+        analyzers::number_analyzer,
+        analyzers::minus_analyzer,
+        analyzers::single_symbol_analyzer,
+        analyzers::combindable_operator_analyzer,
+        analyzers::char_analyzer,
+        analyzers::string_analyzer,
+//    analyzers::calculator_analyzer,
 };
 namespace Mini_C::lexer
 {
-    std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) {
+    std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) noexcept {
         vector<token_t> r;
         bool ok;
         for (size_t pos = 0; pos < size; ) {
