@@ -3,20 +3,22 @@
 #define _PATTERN_HPP
 #include <variant>
 #include <type_traits>
-template<typename ...Ts>
-using tagged_union = std::variant<Ts...>;
+#include "util.h"
 
-namespace Mini_C::uitl {
+namespace Mini_C::util {
+
+	template<typename ...Ts>
+	using tagged_union = std::variant<Ts...>;
+
 	namespace _impl {
 
 		template<typename R, typename ...Ts, typename U, typename ...Fs> R match_impl(U &&u, Fs ...arms)
 		{
-			struct overloaded : public Fs... {using Fs::operator()...; };
-			using CheckArgs = std::conjunction<std::is_invocable<overloaded, Ts>...>;
-			static_assert(CheckArgs::value, "Missing matching cases");
-			using CheckRet = std::conjunction<
-				std::is_convertible<std::invoke_result_t<overloaded, Ts>, R>...>;
-			static_assert(CheckRet::value, "Return type not compatible");
+			static_assert(std::conjunction_v<std::is_invocable<overloaded, Ts>...>,
+				"Missing matching cases");
+			static_assert(
+				std::conjunction_v<std::is_convertible<std::invoke_result_t<overloaded, Ts>, R>...>,
+				"Return type not compatible");
 			overloaded dispatcher{ arms... };
 			return std::visit([&](auto &&var) -> R {
 				return dispatcher(std::forward<decltype(var)>(var));
