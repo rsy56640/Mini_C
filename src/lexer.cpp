@@ -542,11 +542,15 @@ namespace Mini_C::lexer
 						break;
 				}
 				catch (analyzers::Token_Ex& e) {
-					return analyzers::Token_Ex(e._msg + s[e._position], e._position);
+					return analyzers::Token_Ex(
+						e._msg + "\"" + s[e._position] + "\"", e._position
+					);
 				}
 			}
 			if (!ok)
-				return analyzers::Token_Ex(std::string("not a recognizable character.") + s[pos], pos);
+				return analyzers::Token_Ex(
+					std::string("not a recognizable character.") + "\"" + s[pos] + "\"", pos
+				);
 		}
 
 		return r;
