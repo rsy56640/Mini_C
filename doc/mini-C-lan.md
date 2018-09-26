@@ -170,15 +170,15 @@ Note: If the type of the expression is different from the return type of the fun
 
 ### function definition
 
-`fn [return_type] [function_name] ([parameter-list]) [body]`   
+`fn [function_name] ([parameter-list]) -> [return_type]  [body]`   
 e.g.  
 
-    fn void foo(i32 i, str s)
+    fn foo(i32 i, str s)
     {
         //...
     }
     
-    fn const i32 goo()
+    fn goo() -> const i32 
     {
         return 27;
     }
