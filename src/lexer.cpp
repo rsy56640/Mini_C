@@ -133,13 +133,13 @@ namespace Mini_C::lexer::analyzers {
 
         // unnecessity
         // follow numbers
-        const static unordered_set<char> followNumberCharSet = { '+', '-', '*', '/', ')', ']', '}', '|', '&', '^', ',', ':', ';', '%', '=' };
+        const static unordered_set<char> followNumberCharSet = { '+', '-', '*', '/', ')', ']', '}', '|', '&', '^', ',', ':', ';', '%', '=', '>', '<' };
         inline bool canFollowNumber(char c) {
             return followNumberCharSet.find(c) != followNumberCharSet.end();
         }
 
         // for calculator
-        const static unordered_set<char> calculatorNormalOperatorCharSet = { '+', '*', '/', '|', '&', '^', '~', '(', ')' };
+        const static unordered_set<char> calculatorNormalOperatorCharSet = { '+', '*', '/', '|', '&', '^', '~', '(', ')', '%' };
         inline bool isInCalculatorNormalOperatorCharSet(char c) {
             return calculatorNormalOperatorCharSet.find(c) != calculatorNormalOperatorCharSet.end();
         }
@@ -199,7 +199,7 @@ namespace Mini_C::lexer::analyzers {
         if (!supporters::isSingleSymbolChar(s[pos]))
             return false;
 
-        r.push_back(keywords.find(string(1, s[pos++]))->second); // bug when input is: "(3+4.2)-abc+32"
+        r.push_back(keywords.find(string(1, s[pos++]))->second);
         return true;
     }
 
@@ -268,9 +268,9 @@ namespace Mini_C::lexer::analyzers {
         if (s[pos++] != '\'')
             throw Token_Ex("there should be only one character in \'\'", pos);
 
-//        if (pos + 1 >= size || s[pos + 1] != '\'')
-//            throw Token_Ex("there should be only one character in \'\'", pos);
-//        pos += 2;
+        //        if (pos + 1 >= size || s[pos + 1] != '\'')
+        //            throw Token_Ex("there should be only one character in \'\'", pos);
+        //        pos += 2;
 
         return true;
     }
@@ -350,15 +350,15 @@ namespace Mini_C::lexer::analyzers {
                         generateNumberException();
 
                     // previous(wrong) implemetation
-//                    if (s[pos] != '-' && !supporters::isNum(s[pos]))
-//                        generateNumberException();
-//
-//                    int right = 0;
-//                    bool rminus = false;
-//                    if (s[pos] == '-') {
-//                        rminus = true;
-//                        ++pos;
-//                    }
+                    //                    if (s[pos] != '-' && !supporters::isNum(s[pos]))
+                    //                        generateNumberException();
+                    //
+                    //                    int right = 0;
+                    //                    bool rminus = false;
+                    //                    if (s[pos] == '-') {
+                    //                        rminus = true;
+                    //                        ++pos;
+                    //                    }
 
                     int right = (s[pos] - '0');
                     type = numeric_type::F64;
