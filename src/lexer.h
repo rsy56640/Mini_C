@@ -206,7 +206,9 @@ namespace Mini_C::lexer
 				:_msg(std::move(msg)), _position(position) {}
 		};
 	}
-	std::variant<std::vector<token_t>, analyzers::Token_Ex> tokenize(const char* s, const std::size_t size) noexcept;
+	using pos_t = std::size_t;
+	using token_info = std::tuple<token_t, pos_t>;
+	std::variant<std::vector<token_info>, analyzers::Token_Ex> tokenize(const char* s, const std::size_t size) noexcept;
 
 
 }// end namespace Mini_C::lexer

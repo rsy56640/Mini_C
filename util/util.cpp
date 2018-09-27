@@ -5,7 +5,7 @@
 namespace Mini_C::util
 {
 
-	void outputLexVector(const std::vector<lexer::token_t> &tokens) noexcept
+	void outputLexVector(const std::vector<lexer::token_info> &tokens) noexcept
 	{
 		for (auto const& token : tokens)
 			std::visit(overloaded{
@@ -14,7 +14,7 @@ namespace Mini_C::util
 					[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<Mini_C::lexer::numeric_type>(_num)))) << " "; num_print(_num); std::cout << std::endl; },
 					[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << std::quoted(std::get<const std::string>(_str)) << std::endl; },
 					[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
-				}, token);
+				}, std::get<lexer::token_t>(token));
 	}
 
 	void num_print(const Mini_C::lexer::numeric_t& _num) noexcept

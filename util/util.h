@@ -15,7 +15,7 @@ namespace Mini_C::util
 	/*
 	 * output the token-list when used in debug mode.
 	 */
-	void outputLexVector(const std::vector<lexer::token_t> &result) noexcept;
+	void outputLexVector(const std::vector<lexer::token_info> &result) noexcept;
 
 }
 
