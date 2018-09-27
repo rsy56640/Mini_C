@@ -75,8 +75,8 @@ namespace Mini_C::lexer
 
 		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
-		QUESTION, COLON,                             // "?", ":"
-		MEMBER_ACCESS,                               // "->"
+		QUESTION, COLON,                             // "?", ":"      // ternary operator
+		MEMBER_ACCESS, CLASS_SCOPE,                  // "->", "::"    // "->": 1. member access; 2. return type specification
 		SIZEOF,                                      // sizeof
 		LEFT_PARENTHESIS, RIGHT_PARENTHESIS,         // parenthesis      : "(", ")"
 		LEFT_SQUARE_BRACKETS, RIGHT_SQUARE_BRACKETS, // square brackets  : "[", "]"
@@ -121,7 +121,7 @@ namespace Mini_C::lexer
 		/* other operator */
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
 		{ "?", type::QUESTION }, { ":", type::COLON },
-		{ "->", type::MEMBER_ACCESS },
+		{ "->", type::MEMBER_ACCESS }, { "::", type::CLASS_SCOPE },
 		{ "sizeof", type::SIZEOF },
 		{ "(", type::LEFT_PARENTHESIS },      { ")", type::RIGHT_PARENTHESIS },
 		{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
@@ -166,7 +166,7 @@ namespace Mini_C::lexer
 		/* other operator */
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
 		{ type::QUESTION, "?" }, { type::COLON, ":" },
-		{ type::MEMBER_ACCESS, "->" },
+		{ type::MEMBER_ACCESS, "->" }, { type::CLASS_SCOPE, "::" },
 		{ type::SIZEOF, "sizeof" },
 		{ type::LEFT_PARENTHESIS, "(" },      { type::RIGHT_PARENTHESIS, ")" },
 		{ type::LEFT_SQUARE_BRACKETS, "[" },  { type::RIGHT_SQUARE_BRACKETS, "]" },
