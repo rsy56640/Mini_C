@@ -73,6 +73,12 @@ namespace Mini_C::lexer
 		STATIC, CONST,
 		USING,
 
+		/* control statement */
+		FOR, WHILE, DO,
+		CONTINUE, BREAK,
+		SWITCH, CASE, DEFAULT,
+		RETURN,
+
 		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
 		QUESTION, COLON,                             // "?", ":"      // ternary operator
@@ -118,6 +124,12 @@ namespace Mini_C::lexer
 		{ "static", type::STATIC }, { "const", type::CONST },
 		{ "using", type::USING },
 
+		/* control statement */
+		{ "for", type::FOR }, { "while", type::WHILE }, { "do", type::DO },
+		{ "continue", type::CONTINUE }, { "break", type::BREAK },
+		{ "switch", type::SWITCH }, { "case", type::CASE }, { "default", type::DEFAULT },
+		{ "return", type::RETURN },
+
 		/* other operator */
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
 		{ "?", type::QUESTION }, { ":", type::COLON },
@@ -162,6 +174,12 @@ namespace Mini_C::lexer
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 		{ type::STATIC, "static" }, { type::CONST, "const" },
 		{ type::USING, "using" },
+
+		/* control statement */
+		{ type::FOR, "for"}, { type::WHILE, "while" }, { type::DO, "do" },
+		{ type::CONTINUE, "continue" }, { type::BREAK, "break" },
+		{ type::SWITCH, "switch" }, { type::CASE, "case" }, { type::DEFAULT, "default" },
+		{ type::RETURN, "return" },
 
 		/* other operator */
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },
