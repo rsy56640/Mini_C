@@ -72,6 +72,7 @@ namespace Mini_C::lexer
 		STRUCT, STR, FN, VOID,
 		STATIC, CONST,
 		USING,
+		MAIN,
 
 		/* control statement */
 		FOR, WHILE, DO,
@@ -123,6 +124,7 @@ namespace Mini_C::lexer
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
 		{ "static", type::STATIC }, { "const", type::CONST },
 		{ "using", type::USING },
+		{ "main", type::MAIN },
 
 		/* control statement */
 		{ "for", type::FOR }, { "while", type::WHILE }, { "do", type::DO },
@@ -174,6 +176,7 @@ namespace Mini_C::lexer
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 		{ type::STATIC, "static" }, { type::CONST, "const" },
 		{ type::USING, "using" },
+		{ type::MAIN, "main" },
 
 		/* control statement */
 		{ type::FOR, "for"}, { type::WHILE, "while" }, { type::DO, "do" },
