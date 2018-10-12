@@ -75,6 +75,7 @@ namespace Mini_C::lexer
 		MAIN,
 
 		/* control statement */
+		IF, ELSE,
 		FOR, WHILE, DO,
 		CONTINUE, BREAK,
 		SWITCH, CASE, DEFAULT,
@@ -127,6 +128,7 @@ namespace Mini_C::lexer
 		{ "main", type::MAIN },
 
 		/* control statement */
+		{ "if", type::IF }, { "else", type::ELSE },
 		{ "for", type::FOR }, { "while", type::WHILE }, { "do", type::DO },
 		{ "continue", type::CONTINUE }, { "break", type::BREAK },
 		{ "switch", type::SWITCH }, { "case", type::CASE }, { "default", type::DEFAULT },
@@ -179,6 +181,7 @@ namespace Mini_C::lexer
 		{ type::MAIN, "main" },
 
 		/* control statement */
+		{ type::IF, "if" }, { type::ELSE, "else" },
 		{ type::FOR, "for"}, { type::WHILE, "while" }, { type::DO, "do" },
 		{ type::CONTINUE, "continue" }, { type::BREAK, "break" },
 		{ type::SWITCH, "switch" }, { type::CASE, "case" }, { type::DEFAULT, "default" },
