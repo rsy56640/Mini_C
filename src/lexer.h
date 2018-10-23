@@ -72,6 +72,7 @@ namespace Mini_C::lexer
 		STRUCT, STR, FN, VOID,
 		STATIC, CONST,
 		ENUM, UNION,
+		NEW, DELETE,
 		USING,
 		MAIN,
 
@@ -126,6 +127,7 @@ namespace Mini_C::lexer
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
 		{ "static", type::STATIC }, { "const", type::CONST },
 		{ "enum", type::ENUM }, { "union", type::UNION },
+		{ "new", type::NEW }, { "delete", type::DELETE },
 		{ "using", type::USING },
 		{ "main", type::MAIN },
 
@@ -180,6 +182,7 @@ namespace Mini_C::lexer
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 		{ type::STATIC, "static" }, { type::CONST, "const" },
 		{ type::ENUM, "enum" }, { type::UNION, "union" },
+		{ type::NEW, "new" }, { type::DELETE, "delete" },
 		{ type::USING, "using" },
 		{ type::MAIN, "main" },
 

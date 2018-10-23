@@ -1,10 +1,6 @@
 # Mini C Lang Description
-
-
-&nbsp;   
 &nbsp;   
 ## Basics
------
 
 <a id="comments"></a>
 ### [comments](https://en.cppreference.com/w/c/comment)
@@ -150,8 +146,23 @@ Syntax:
 Note: If the type of the expression is different from the return type of the function, its value is converted as if by assignment to an object whose type is the return type of the function, except that overlap between object representations is permitted.
 
 
+&nbsp;   
+&nbsp;   
+## Memory Management
 
+- `new()`
+  - `type` `id` `=` `new` `type` `[amount]`
+  - `type` `id` `=` `new` `type` `()`
+- `delete()`
+  - `delete` `id`
+  - `delete` `[]` `id`
 
+<a></a>
+
+    i32* i = new i32[7];
+    for (i32 j = 0; j < 7; j++)
+        i[j] = j;
+    delete[] i;
 
 
 &nbsp;   
@@ -159,23 +170,50 @@ Note: If the type of the expression is different from the return type of the fun
 ## Expression
 -----
 
-
-
-
+    A::_a = 23u + x[12] + 0x0_1_000_000_100;
+    
+    A *a;
+    
+    a->_b = A::_a  -0x723;
+    
+    if(a->_b == 3) A::_a = 7e1_0;
+    
+    fn foo(i32 i, str s)-> str { return "hello" + str; }
+    
+    for(i32 i = 0; i < 100; i++)
+    	a->_b++;
+    	
+    static const f64 &f= foo()->i++ -.343_233+17 * 8_.23_ + ++_u;
+    
+    b=-23 - -7- (--a)++ - -.723_233_9e-4+(0+(b-(b/(7.22)-4))-0u)+ --a.__x;
+    
+    bool b = true | false || false & true;
+    
+    b%=(a+++3.777_098)+ sizeof(a);
+    
+    f64 f = -9+(2+ -23-.455 +    3.423_2-5)* 1_070_022 %55+ 1_233_123.77 + -.7;
+    
+    const char* s ="hello world";
+    
+    char c= '\n';
+    
+    using Ap_t = A::A_ptr_t;
 
 
 &nbsp;   
 &nbsp;   
 ## Function
 
-### function definition
 
 `fn [function_name] ([parameter-list]) -> [return_type]  [body]`   
 e.g.  
 
-    fn foo(i32 i, str s)
+    fn foo(i32 i, str s) -> void
     {
-        //...
+        i32 result = 0x7ff;
+        if((i << 2) < result)
+            print(s);
+        else print(i);
     }
     
     fn goo() -> const i32 
@@ -184,8 +222,92 @@ e.g.
     }
 
 
+&nbsp;   
+&nbsp;   
 
+
+## struct & union
+
+    struct A { static i32 _a; i32 _b; using A_ptr_t = A*; enum{ a = 1;} };
+    
+    union B { i32 i; f32 f; };
 
 
 &nbsp;   
 &nbsp;   
+
+
+## main function
+
+    // A complete C program has to have a function with name 'main'.    
+    // This is the function called by the operating system.   
+    // It must return an int value indicating whether the prograam executed correctly or if there was an error.   
+    // In UNIX, the main program returns 0 to indicate no errors.    
+    // Their are several valid forms:   
+    fn main() -> i32 
+    fn main(argc, argv) -> i32 
+    fn main(argc, argv, envp) -> i32 
+    // The parameters are set up by the operating system when the program starts. The traditional arg stands for argument.   
+    // Note that argv[argc] == NULL
+
+
+&nbsp;   
+&nbsp;   
+
+
+## Code Sample
+
+    struct Student {
+        str name;
+        u16 rank;
+    }
+    
+    struct StudentNode {
+        Student* student;
+        StudentNode* next_student;
+    }
+    
+    struct Class {
+        StudentNode* dummy;
+        i32 amount;
+    }
+    
+    fn empty_class() -> Class {
+        StudentNode* snode = new StudentNode();
+        snode->student = 0;
+        snode->next_student = 0;
+        Class c;
+        c.dummy = snode;
+        c.amount = 0;
+        return c;
+    }
+    
+    fn destruct_class(Class* c) -> void {
+        StudentNode* cur = c->dummy;
+        for (i32 i = c->amount; i > 0 ; i--)
+        {
+            StudentNode* temp = cur;
+            cur = cur->next_student;
+            if(i != c->amount) delete temp->student;
+            delete temp;
+        }
+    }
+    
+    fn register_in_class(Class* c, Student* s) -> void {
+        StudentNode* snode = new StudentNode();
+        snode->student = s;
+        snode->next_student = c->dummy->next_student;
+        c->dummy->next_student = snode;
+        c->amount++;
+    }
+    
+    fn main() -> i32
+    {
+        Class c = empty_class();
+        Student* Alice = new Student();
+        register_in_class(&c, Alice);
+        Student* Bob = new Student();
+        register_in_class(&c, Bob);
+        destruct_class(&c);
+        return 0;
+    }

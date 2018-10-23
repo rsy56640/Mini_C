@@ -29,6 +29,9 @@ void rsy_test()
 		{
 			inputFile.getline(buffer, MAXSIZE - 1);
 			line_num++;
+			std::cout << "-------------------------------------------------" << std::endl;
+			std::cout << "line " << line_num << ":" << std::endl;
+			std::cout << "-------------------------------------------------" << std::endl;
 			TEST_LEXER::test_lexer(buffer, line_num);
 			std::cout << std::endl << std::endl;
 		}
