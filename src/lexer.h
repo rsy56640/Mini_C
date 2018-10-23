@@ -71,6 +71,7 @@ namespace Mini_C::lexer
 		TRUE, FALSE,
 		STRUCT, STR, FN, VOID,
 		STATIC, CONST,
+		ENUM, UNION,
 		USING,
 		MAIN,
 
@@ -124,6 +125,7 @@ namespace Mini_C::lexer
 		{ "true", type::TRUE }, { "false", type::FALSE },
 		{ "struct", type::STRUCT }, { "str", type::STR }, { "fn", type::FN }, { "void", type::VOID },
 		{ "static", type::STATIC }, { "const", type::CONST },
+		{ "enum", type::ENUM }, { "union", type::UNION },
 		{ "using", type::USING },
 		{ "main", type::MAIN },
 
@@ -177,6 +179,7 @@ namespace Mini_C::lexer
 		{ type::TRUE, "true" }, { type::FALSE, "false" },
 		{ type::STRUCT, "struct" }, { type::STR, "str" }, { type::FN, "fn" }, { type::VOID, "void" },
 		{ type::STATIC, "static" }, { type::CONST, "const" },
+		{ type::ENUM, "enum" }, { type::UNION, "union" },
 		{ type::USING, "using" },
 		{ type::MAIN, "main" },
 
