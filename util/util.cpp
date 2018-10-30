@@ -46,6 +46,11 @@ namespace Mini_C::util
 		else std::cout << static_cast<int>(std::get<double>(_num));
 	}
 
+	std::string outputType(const parser::value_t& _type)
+	{
+		return std::string();
+	}
+
 
 
 }

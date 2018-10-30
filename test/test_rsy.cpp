@@ -42,10 +42,34 @@ void rsy_test()
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl; }
 }
 
+namespace Mini_C::parser
+{
+	void eval();
+	void apply();
+}
+
+void parser_test()
+{
+	using namespace Mini_C::parser;
+
+
+
+
+}
+
+
+void test()
+{
+	//rsy_test();
+
+	parser_test();
+
+}
+
 
 int main()
 {
-	rsy_test();
+	test();
 	std::getchar();
 	return 0;
 }
