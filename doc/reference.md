@@ -5,7 +5,9 @@
 
 - [Let's Build a Compiler, by Jack Crenshaw](https://compilers.iecc.com/crenshaw/)
 - [手把手教你构建 C 语言编译器](https://lotabout.me/2015/write-a-C-interpreter-0/)
+- [Writing a compiler in Ruby, bottom up](http://hokstad.com/compiler)
 - [Writing a C Compiler](https://norasandler.com/archive/)
+- [如何写一个简单的编译器？](https://www.zhihu.com/question/36756224/answer/122676534)
 - [【Parser系列】新的征程](https://zhuanlan.zhihu.com/p/41886644)
 - [【Parser系列】Lexer IV](https://zhuanlan.zhihu.com/p/42413097)
 - [Kaleidoscope: Implementing a Language with LLVM](https://llvm.org/docs/tutorial/index.html)
@@ -18,7 +20,6 @@
 - [考不上三本也能懂系列——处理声明（一）](https://zhuanlan.zhihu.com/p/45971898)
 - [考不上三本也能懂系列——实现C++类型系统](https://zhuanlan.zhihu.com/p/47203297)
 - [如何写编译器的代码生成，生成汇编代码？](https://www.zhihu.com/question/28890081)
-- [如何写一个简单的编译器？](https://www.zhihu.com/question/36756224/answer/122676534)
 - [Recursive descent parser](https://en.wikipedia.org/wiki/Recursive_descent_parser)
 - [Do modern languages still use parser generators?](https://softwareengineering.stackexchange.com/questions/250256/do-modern-languages-still-use-parser-generators)
 - [如何学写一个编译器后端？](https://www.zhihu.com/question/56005792/answer/147558407)
@@ -33,6 +34,8 @@
 - [covscript/covscript - Covariant Script Programming Language: The Interpreter](https://github.com/covscript/covscript)
 - [Fedjmike/mini-c - Dr Strangehack, or: how to write a self-hosting C compiler in 10 hours](https://github.com/Fedjmike/mini-c)
 - [Kmotiko/DummyCCompiler](https://github.com/Kmotiko/DummyCCompiler)
+- [shiyanhui/Compiler - Compiler for C language in python](https://github.com/shiyanhui/Compiler)
+- [wgtdkp/wgtcc - A small C11 compiler in C++11](https://github.com/wgtdkp/wgtcc)
 - [drh/lcc - The lcc retargetable ANSI C compiler](https://github.com/drh/lcc)
 - [aamine/cbc - Cb (C flat) compiler. Cb is simplified C](https://github.com/aamine/cbc)
 - [c2nes/javalang - Pure Python Java parser and tools](https://github.com/c2nes/javalang)
@@ -42,6 +45,7 @@
 - [TsReaper/My-Pascal-Compiler - A simple compiler for My Pascal, with LLVM as its backend.](https://github.com/TsReaper/My-Pascal-Compiler)
 - [WuXianglong/CMMCompiler - 基于Java实现的CMM语言解释器，包括词法分析，语法分析等](https://github.com/WuXianglong/CMMCompiler)
 - [llvm-mirror/clang](https://github.com/llvm-mirror/clang/tree/master/lib)
+- [rui314/8cc - A Small C Compiler](https://github.com/rui314/8cc)
 
 
 &nbsp;   
@@ -60,6 +64,7 @@
 - [对 Parser 的误解](http://www.yinwang.org/blog-cn/2015/09/19/parser)
 - [【Lisp系列】实现Lambda](https://zhuanlan.zhihu.com/p/47309037)
 - [How exactly is an Abstract Syntax Tree created?](https://softwareengineering.stackexchange.com/questions/254074/how-exactly-is-an-abstract-syntax-tree-created)
+- [寄存器分配问题？](https://www.zhihu.com/question/29355187)
 
 
 &nbsp;   
@@ -70,3 +75,8 @@
 - []()
 - []()
 - []()
+
+
+&nbsp;   
+&nbsp;   
+![](./assets/python_AST.png)
