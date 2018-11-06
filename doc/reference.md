@@ -1,9 +1,11 @@
 # 整理一些 编译器/解释器 资料
 
+&nbsp;   
 ## 貌似有用
 
 - [Let's Build a Compiler, by Jack Crenshaw](https://compilers.iecc.com/crenshaw/)
 - [手把手教你构建 C 语言编译器](https://lotabout.me/2015/write-a-C-interpreter-0/)
+- [Writing a C Compiler](https://norasandler.com/archive/)
 - [【Parser系列】新的征程](https://zhuanlan.zhihu.com/p/41886644)
 - [【Parser系列】Lexer IV](https://zhuanlan.zhihu.com/p/42413097)
 - [Kaleidoscope: Implementing a Language with LLVM](https://llvm.org/docs/tutorial/index.html)
@@ -17,6 +19,10 @@
 - [考不上三本也能懂系列——实现C++类型系统](https://zhuanlan.zhihu.com/p/47203297)
 - [如何写编译器的代码生成，生成汇编代码？](https://www.zhihu.com/question/28890081)
 - [如何写一个简单的编译器？](https://www.zhihu.com/question/36756224/answer/122676534)
+- [Recursive descent parser](https://en.wikipedia.org/wiki/Recursive_descent_parser)
+- [Do modern languages still use parser generators?](https://softwareengineering.stackexchange.com/questions/250256/do-modern-languages-still-use-parser-generators)
+- [如何学写一个编译器后端？](https://www.zhihu.com/question/56005792/answer/147558407)
+- [如何利用LLVM写一个编译器？](https://www.zhihu.com/question/30479779)
 
 
 &nbsp;   
@@ -34,11 +40,14 @@
 - [bajdcc/CParser - 解析C语言的解释器](https://github.com/bajdcc/CParser)
 - [lotabout/write-a-C-interpreter - Write a simple interpreter of C. Inspired by c4 and largely based on it.](https://github.com/lotabout/write-a-C-interpreter)
 - [TsReaper/My-Pascal-Compiler - A simple compiler for My Pascal, with LLVM as its backend.](https://github.com/TsReaper/My-Pascal-Compiler)
+- [WuXianglong/CMMCompiler - 基于Java实现的CMM语言解释器，包括词法分析，语法分析等](https://github.com/WuXianglong/CMMCompiler)
+- [llvm-mirror/clang](https://github.com/llvm-mirror/clang/tree/master/lib)
 
 
 &nbsp;   
-## 待定
+## 其他
 
+- [clang编译器的错误提示的精准程度是如何做到的？](https://www.zhihu.com/question/38615812/answer/77222989)
 - [自制编译器](https://zhuanlan.zhihu.com/compiler)
 - [编译器课程资源](https://github.com/chyyuu/compiler_course_info/blob/master/resources.md)
 - [3篇论文](https://www.zhihu.com/question/36756224/answer/88530013)
@@ -50,3 +59,14 @@
 - [C++ Parser (Front End)](http://www.semanticdesigns.com/Products/FrontEnds/CppFrontEnd.html)
 - [对 Parser 的误解](http://www.yinwang.org/blog-cn/2015/09/19/parser)
 - [【Lisp系列】实现Lambda](https://zhuanlan.zhihu.com/p/47309037)
+- [How exactly is an Abstract Syntax Tree created?](https://softwareengineering.stackexchange.com/questions/254074/how-exactly-is-an-abstract-syntax-tree-created)
+
+
+&nbsp;   
+## 参考书籍
+
+- []()
+- []()
+- []()
+- []()
+- []()
