@@ -24,6 +24,9 @@
 - [Do modern languages still use parser generators?](https://softwareengineering.stackexchange.com/questions/250256/do-modern-languages-still-use-parser-generators)
 - [如何学写一个编译器后端？](https://www.zhihu.com/question/56005792/answer/147558407)
 - [如何利用LLVM写一个编译器？](https://www.zhihu.com/question/30479779)
+- [我想自己用C/C++做一个脚本语言解释器，但是不知道需要什么知识？](https://www.zhihu.com/question/40522408/answer/87314432)
+- [Engineering a compiler. 第3章，语法分析器](https://github.com/GHScan/TechNotes/blob/master/2015/1.markdown)
+- [Engineering a compiler. 第5章，中间表示](https://github.com/GHScan/TechNotes/blob/master/2015/2.markdown)
 
 
 &nbsp;   
@@ -65,6 +68,7 @@
 - [【Lisp系列】实现Lambda](https://zhuanlan.zhihu.com/p/47309037)
 - [How exactly is an Abstract Syntax Tree created?](https://softwareengineering.stackexchange.com/questions/254074/how-exactly-is-an-abstract-syntax-tree-created)
 - [寄存器分配问题？](https://www.zhihu.com/question/29355187)
+- [Tree structures processing and unified AST](http://blog.ptsecurity.com/2016/07/tree-structures-processing-and-unified.html)
 
 
 &nbsp;   
