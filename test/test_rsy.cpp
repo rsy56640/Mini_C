@@ -11,9 +11,9 @@
 #include <fstream>
 #include <iomanip>
 
-void rsy_test()
+void rsy_lexer_init_test()
 {
-	using namespace TEST;
+	using namespace Mini_C::TEST;
 	constexpr std::size_t MAXSIZE = 128;
 	char buffer[MAXSIZE];
 	const char* filename = "./test/rsy1.txt";
@@ -42,13 +42,24 @@ void rsy_test()
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl; }
 }
 
+void rsy_lexer_test()
+{
+	Mini_C::lexer::Lexer lexer;
+	try { lexer.tokenize("./test/rsy1.txt"); }
+	catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); std::cout << std::endl; }
+	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
+	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
+	lexer.print();
+}
+
+
 namespace Mini_C::parser
 {
 	void eval();
 	void apply();
 }
 
-void parser_test()
+void rsy_parser_test()
 {
 	using namespace Mini_C::parser;
 
@@ -60,10 +71,9 @@ void parser_test()
 
 void test()
 {
-	//rsy_test();
-
-	parser_test();
-
+	// rsy_lexer_init_test();
+	rsy_lexer_test();
+	// rsy_parser_test();
 }
 
 

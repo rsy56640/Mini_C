@@ -25,8 +25,6 @@ using std::make_tuple;
 using std::unordered_map;
 using keyword_it = unordered_map<string, type>::const_iterator;
 
-template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
-template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
 namespace Mini_C::lexer {
 	std::string type2str(type _type) noexcept
@@ -159,9 +157,9 @@ namespace Mini_C::lexer::analyzers {
 		keyword_it it = keywords.find(ns);
 		if (it != keywords.end())
 			if (it->second == type::TRUE)
-				r.push_back(make_tuple((make_tuple(1.0, numeric_type::BOOLEAN)), pos));
+				r.push_back(make_tuple((std::tuple<const double, const numeric_type>(1.0, numeric_type::BOOLEAN)), pos));
 			else if (it->second == type::FALSE)
-				r.push_back(make_tuple((make_tuple(0.0, numeric_type::BOOLEAN)), pos));
+				r.push_back(make_tuple((std::tuple<const double, const numeric_type>(0.0, numeric_type::BOOLEAN)), pos));
 			else
 				r.push_back(make_tuple((it->second), pos));
 		else
@@ -261,9 +259,9 @@ namespace Mini_C::lexer::analyzers {
 		if (++pos == size)
 			throw Token_Ex("expected corresponding \'", pos);
 		if (s[pos] == '\\')
-			r.push_back(make_tuple((make_tuple((double)escapeTackle(s, pos, size, r), numeric_type::CHAR)), pos));
+			r.push_back(make_tuple((std::tuple<const double, const numeric_type>((double)escapeTackle(s, pos, size, r), numeric_type::CHAR)), pos));
 		else
-			r.push_back(make_tuple((make_tuple((double)s[pos++], numeric_type::CHAR)), pos));
+			r.push_back(make_tuple((std::tuple<const double, const numeric_type>((double)s[pos++], numeric_type::CHAR)), pos));
 
 		if (s[pos++] != '\'')
 			throw Token_Ex("there should be only one character in \'\'", pos);
@@ -325,7 +323,7 @@ namespace Mini_C::lexer::analyzers {
 			//            if (c == '.')
 			//                generateNumberException();
 
-			r.push_back(make_tuple((make_tuple(value, numeric_type::U32)), pos));
+			r.push_back(make_tuple((std::tuple<const double, const numeric_type>(value, numeric_type::U32)), pos));
 		};
 
 		auto defaultAnalyzer = [&]() {
@@ -371,7 +369,7 @@ namespace Mini_C::lexer::analyzers {
 						else
 							break;
 
-					r.push_back(make_tuple((make_tuple((isMinus ? -value : value) * pow(10, rminus ? -right : right), type)), pos));
+					r.push_back(make_tuple((std::tuple<const double, const numeric_type>((isMinus ? -value : value) * pow(10, rminus ? -right : right), type)), pos));
 				};
 
 				//default is f32 analyzer
@@ -397,7 +395,7 @@ namespace Mini_C::lexer::analyzers {
 						break;
 				}
 
-				r.push_back(make_tuple((make_tuple((isMinus ? -value : value), type)), pos));
+				r.push_back(make_tuple((std::tuple<const double, const numeric_type>((isMinus ? -value : value), type)), pos));
 			};
 
 
@@ -423,11 +421,8 @@ namespace Mini_C::lexer::analyzers {
 					break;
 			}
 
-			r.push_back(make_tuple((make_tuple((isMinus ? -value : value), type)), pos));
+			r.push_back(make_tuple((std::tuple<const double, const numeric_type>((isMinus ? -value : value), type)), pos));
 		};
-
-
-
 
 
 		if (s[pos] == '0' && pos + 1 < size && s[pos + 1] == 'x')
@@ -523,6 +518,12 @@ analyzers::analyzer analyzer[] = {
 		analyzers::string_analyzer,
 };
 #endif
+
+
+// for Lexer::print()
+namespace Mini_C::TEST { void num_print(const lexer::numeric_t& _num) noexcept; }
+
+
 namespace Mini_C::lexer
 {
 	std::variant<std::vector<token_info>, analyzers::Token_Ex> tokenize(const char *s, const size_t size) noexcept {
@@ -554,5 +555,86 @@ namespace Mini_C::lexer
 		}
 
 		return r;
+	} // end fuction tokenize();
+
+
+	/*
+	 * class member function for Lexer.
+	 */
+	void Lexer::tokenize(const char* filename)
+	{
+		constexpr std::size_t MAXSIZE = 128;
+		char buffer[MAXSIZE];
+		std::ifstream inputFile{ filename, std::ios::in };
+		if (!inputFile.is_open())
+		{
+			std::cout << "failed to open: " << std::quoted(filename) << std::endl;
+			return;
+		}
+		try {
+			std::size_t line_num = 0;
+			_token_stream.clear();
+			while (!inputFile.eof())
+			{
+				inputFile.getline(buffer, MAXSIZE - 1);
+				line_num++;
+				auto result = Mini_C::lexer::tokenize(buffer, strlen(buffer));
+				std::visit(overloaded{
+						[line_num](const Mini_C::lexer::analyzers::Token_Ex& e) {
+							throw Mini_C::MiniC_Universal_Exception{
+								std::move(const_cast<Mini_C::lexer::analyzers::Token_Ex&>(e)._msg),
+								line_num, e._position }; },
+						[line_num, this](const std::vector<Mini_C::lexer::token_info>& tokens) { for (token_info const& token : tokens) this->_token_stream.emplace_back(token, line_num); },
+					}, result);
+			}
+			inputFile.close();
+		}
+		catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); }
+		catch (const std::exception& e) { std::cout << e.what() << std::endl; }
+		catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl; }
 	}
-}
+
+	std::size_t Lexer::size() const { return _token_stream.size(); }
+
+	bool Lexer::empty() const { return _token_stream.empty(); }
+
+#define CHECK_EMPTY_AND_UPDATE do{                                                  \
+    if (_token_stream.empty())                                                      \
+        throw MiniC_Universal_Exception("Need more tokens", cur_line, cur_pos);     \
+    cur_pos = _token_stream.front()._pos;                                           \
+    cur_line = _token_stream.front()._line;                                         \
+	} while(0)
+
+	Token Lexer::getToken() {
+		CHECK_EMPTY_AND_UPDATE;
+		return _token_stream.front();
+	}
+
+	void Lexer::popToken() {
+		CHECK_EMPTY_AND_UPDATE;
+		_token_stream.pop_front();
+	}
+
+	Token Lexer::consumeToken() {
+		CHECK_EMPTY_AND_UPDATE;
+		const Token token = _token_stream.front();
+		_token_stream.pop_front();
+		return token;
+	}
+
+
+	void Lexer::print() const {
+		for (Token const& token : _token_stream)
+		{
+			std::cout << "line: " << token._line << " \tpos:" << token._pos << "\t\t";
+			std::visit(overloaded{
+					[](const Mini_C::lexer::type& _type) { std::cout << "type: " << "\t\t\t" << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
+					[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << "\t\t" << _identifier << std::endl; },
+					[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << "\t\t" << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<const Mini_C::lexer::numeric_type>(_num)))) << "\t"; TEST::num_print(_num); std::cout << std::endl; },
+					[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << "\t" << std::quoted(std::get<const std::string>(_str)) << std::endl; },
+					[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
+				}, token._token);
+		}
+	}
+
+} // end namespace MiniC::lexer

@@ -1,7 +1,10 @@
 #ifndef test_hpp
 #define test_hpp
+#include <string>
+#include "../src/lexer.h"
+#include "../test/attempt/rsy/eval_and_apply.h"
 
-namespace TEST
+namespace Mini_C::TEST
 {
 
 	/**
@@ -15,6 +18,21 @@ namespace TEST
 		void test_lexer(const char* s, const std::size_t line_num);
 	}
 
+	/*
+	 * print numeric value in form of formal format.
+	 */
+	void num_print(const lexer::numeric_t& _num) noexcept;
+
+	/*
+	 * output the token-list when used in debug mode.
+	 */
+	void outputLexVector(const std::vector<Mini_C::lexer::token_info> &result) noexcept;
+
+
+	/*
+	 * return quoted type-string
+	 */
+	std::string outputType(const parser::value_t& _type);
 
 
 }

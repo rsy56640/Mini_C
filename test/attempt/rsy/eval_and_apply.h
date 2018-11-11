@@ -6,8 +6,8 @@
 
 namespace Mini_C::parser
 {
-	using namespace lexer;
 
+	using num_t = std::tuple<double, lexer::numeric_type>;
 	struct pointer_t {};
 	struct str_t {};
 	struct class_t {};
@@ -15,7 +15,7 @@ namespace Mini_C::parser
 
 	enum class specifier_t { const_t, static_t };
 	using value_t = std::pair<specifier_t,
-		std::variant<numeric_t, pointer_t, str_t, class_t, union_t>>;
+		std::variant<num_t, pointer_t, str_t, class_t, union_t>>;
 
 	// constraint on variables
 	class Env
@@ -55,7 +55,7 @@ namespace Mini_C::parser
 		void update(const lexer::identifier& _name, const value_t& _value);
 
 		Env_ptr make_env(const Env_ptr& cur_env_ptr,
-			const std::vector<std::pair<identifier, value_t>>& param_list);
+			const std::vector<std::pair<lexer::identifier, value_t>>& param_list);
 
 	};
 

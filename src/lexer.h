@@ -3,18 +3,33 @@
 #define _LEXER_H
 #include <variant>
 #include <utility>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include <deque>
 #include "miniC_exception.h"
+#include "../util/util.h"
+
+namespace std {
+	template<> struct hash<const std::string> {
+		std::size_t operator()(const std::string& key) const {
+			static const std::hash<std::string> _hash_obj;
+			return _hash_obj(key);
+		}
+	};
+}
 
 namespace Mini_C::lexer
 {
+	using namespace util;
 
 	/*
 	 * represent names for: variable, function and struct
 	 */
-	using identifier = std::string;
+	using identifier = const std::string;
 
 
 	/*
@@ -26,7 +41,7 @@ namespace Mini_C::lexer
 	 * Promise: The order of `numeric_type` is same in `type`.
 	 */
 	enum class numeric_type { BOOLEAN, CHAR, I16, I32, U16, U32, F32, F64 };
-	using numeric_t = std::tuple<double, numeric_type>;
+	using numeric_t = std::tuple<const double, const numeric_type>;
 
 
 	/*
@@ -208,7 +223,7 @@ namespace Mini_C::lexer
 	/*
 	 * represent all types of token
 	 */
-	using token_t = std::variant<type, identifier, numeric_t, string_literal_t>;
+	using token_t = const std::variant<type, identifier, numeric_t, string_literal_t>;
 
 
 	/*
@@ -236,9 +251,48 @@ namespace Mini_C::lexer
 				:_msg(std::move(msg)), _position(position) {}
 		};
 	}
-	using pos_t = std::size_t;
+	using pos_t = const std::size_t;
+	using line_t = const std::size_t;
 	using token_info = std::tuple<token_t, pos_t>;
 	std::variant<std::vector<token_info>, analyzers::Token_Ex> tokenize(const char* s, const std::size_t size) noexcept;
+
+
+	/* Token struct
+	 *     members are all const.
+	 */
+	struct Token
+	{
+		pos_t _pos;
+		line_t _line;
+		token_t _token;
+		Token(token_info const& _token_info, line_t line_num)
+			:
+			_pos(std::get<pos_t>(_token_info)),
+			_line(line_num),
+			_token(std::get<token_t>(_token_info))
+		{}
+		Token(const Token&) = default;
+		Token& operator=(const Token&) & = default;
+	};
+
+	class Lexer
+	{
+	public:
+		void tokenize(const char* filename);
+		std::size_t size() const;
+		bool empty() const;
+		Token getToken();       // only get, if no token, `throw MiniC_Universal_Exception`
+		void popToken();        // pop front, if no token, `throw MiniC_Universal_Exception`
+		Token consumeToken();   // consume, if no token, `throw MiniC_Universal_Exception`
+		void print() const;     // for DEBUG
+		Lexer() = default;
+		Lexer(const Lexer&) = delete;
+		Lexer& operator=(const Lexer&) = delete;
+	private:
+		std::deque<Token> _token_stream;
+		std::size_t cur_pos = 0;
+		std::size_t cur_line = 0;
+	};
 
 
 }// end namespace Mini_C::lexer

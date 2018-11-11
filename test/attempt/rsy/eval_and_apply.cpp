@@ -1,6 +1,7 @@
 #include "eval_and_apply.h"
 #include "../../../util/pattern.hpp"
 #include "../../../util/util.h"
+#include "../../test.h"
 #include <memory>
 
 namespace Mini_C::parser
@@ -9,7 +10,8 @@ namespace Mini_C::parser
 
 	const typename Env::Env_ptr Env::get_base_env()
 	{
-		return std::make_shared<Env>();
+		static Env::Env_ptr _base_env = std::make_shared<Env>();
+		return _base_env;
 	}
 
 	/*
@@ -23,8 +25,8 @@ namespace Mini_C::parser
 	}
 
 	/*
-	* If such `_name` exists, throw Env_Ex.
-	*/
+	 * If such `_name` exists, throw Env_Ex.
+	 */
 	void Env::insert(const lexer::identifier& _name, const value_t& _value)
 	{
 		if (_env.find(_name) == _env.end())
@@ -47,7 +49,15 @@ namespace Mini_C::parser
 		// type check
 		else if (_value.second.index() != it->second.second.index())
 			throw std::string("The type of value assigned to the variable \"") + _name + "\" has not been matched: "
-			+ util::outputType(it->second) + " to " + util::outputType(_value);
+			+ TEST::outputType(it->second) + " to " + TEST::outputType(_value);
+
+		// type detailed check
+		// 
+		// TODO
+		//
+		//
+
+
 
 		// const check
 		else if (it->second.first == specifier_t::const_t)
