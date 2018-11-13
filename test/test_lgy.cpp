@@ -5,8 +5,7 @@
 
 int main()
 {
-
-	std::getchar();
+    cout << "Hello World!" << endl;
 	return 0;
 }
 #endif // LGY_TEST
