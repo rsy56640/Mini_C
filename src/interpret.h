@@ -1,10 +1,13 @@
 #pragma once
-#ifndef _EVAL_AND_APPLY_H
-#define _EVAL_AND_APPLY_H
-#include "../../../src/lexer.h"
+#ifndef _INTERPRET_H
+#define _INTERPRET_H
+#include <memory>
+#include <tuple>
+#include <type_traits>
+#include "lexer.h"
+#include "parser.h"
 
-#if 0
-namespace Mini_C::parser
+namespace Mini_C::interpret
 {
 
 	using num_t = std::tuple<double, lexer::numeric_type>;
@@ -39,19 +42,19 @@ namespace Mini_C::parser
 		Env& operator=(Env&&) = delete;
 
 		/*
-		 * If no such `_name` exists, throw Env_Ex.
-		 */
+		* If no such `_name` exists, throw Env_Ex.
+		*/
 		value_t find(const lexer::identifier& _name);
 
 		/*
-		 * If such `_name` exists, throw Env_Ex.
-		 */
+		* If such `_name` exists, throw Env_Ex.
+		*/
 		void insert(const lexer::identifier& _name, const value_t& _value);
 
 		/*
-		 * If no such `_name` exists,
-		 * otherwise if Type-Check fails,throw Env_Ex.
-		 */
+		* If no such `_name` exists,
+		* otherwise if Type-Check fails,throw Env_Ex.
+		*/
 		void update(const lexer::identifier& _name, const value_t& _value);
 
 		Env_ptr make_env(const Env_ptr& cur_env_ptr,
@@ -71,12 +74,7 @@ namespace Mini_C::parser
 	};
 
 
-	void eval();
 
+} // end namespace Mini_C::interpret
 
-	void apply();
-
-
-} // end namespace Mini_C::parser
-# endif
-#endif // _EVAL_AND_APPLY_H
+#endif // !_INTERPRET_H

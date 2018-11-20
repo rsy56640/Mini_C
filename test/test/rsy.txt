@@ -1,19 +1,20 @@
 struct A { static i32 _a; i32 _b; using A_ptr_t = A*; enum{ a = 1;} };
 union B { i32 i; f32 f; };
-A::_a = 23u + x[12] + 0x0_1_000_000_100;
+A::_a = 23u + x[12] + 0x0_1_000_000;
 A *a;
-a->_b = A::_a  -0x723;
+begin;
+a->_b = A::_a  - 0x123 +0x1A;
 if(a->_b == 3) A::_a = 7e1_0;
 fn foo(i32 i, str s)-> str { return "hello" + str; }
 for(i32 i = 0; i < 100;i++)
 	a->_b++;
 static const f64 &f= foo()->i++ -.343_233+17 * 8_.23_ + ++_u;
-b=-23 - -7- (--a)++ - -.723_233_9e-4+(0+(b-(b/(7.22)-4))-0u)+ --a.__x;
+b=-23 - -7- (-(-a))++ - -.723_233_9e-4+(0+(b-(b/(7.22)-4))-0u)+ --a.__x;
 bool b = true | false || false & true;
-b%=(a+++3.777_098)+ sizeof(a);
-f64 f = -9+(2+ -23-.455 +    3.423_2-5)* 1_070_022 %55+ 1_233_123.77 + -.7;
+b%=(a+++3.777_098)+ size of(a);
+f64 f = -9+(2+ -23-.455 +    3.423_2-5)* 1_070_022 %55+ 1_233__123.77 + -.7;
 const char* s ="hello world";
 i32* i = new i32[7];
 delete[] i;
-char c= '\n';
+char c= '\x61';
 using Ap_t = A::A_ptr_t;

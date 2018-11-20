@@ -1,12 +1,9 @@
-#include "eval_and_apply.h"
-#include "../../../util/pattern.hpp"
-#include "../../../util/util.h"
-#include "../../test.h"
-
+#include "interpret.h"
 
 #if 0
-namespace Mini_C::parser
+namespace Mini_C::interpret
 {
+
 	using namespace lexer;
 
 	const typename Env::Env_ptr Env::get_base_env()
@@ -77,24 +74,7 @@ namespace Mini_C::parser
 	}
 
 
-	void eval()
-	{
 
 
-
-	}
-
-
-	void apply()
-	{
-
-
-
-	}
-
-
-
-
-
-} // end namespace Mini_C::parser
+} // end namespace Mini_C::interpret
 #endif
