@@ -1,0 +1,306 @@
+```tsl
+terminate = enum class tmn{
++, -, *, /, %, <<, >>,
+~, &, |, ^,
+++, --, 
+
+!, &&, ||,
+
+==, !=,
+<, >, <=, >=,
+
+=,
++=, -=, *=, /=, %=,
+<<=, >>=,
+&=, |=, ^=,
+
+number_constant, id, str_literal,
+
+BOOLEAN, CHAR, I16, I32,
+U16, U32, F32, F64,
+
+TRUE, FALSE,
+STRUCT, STR, FN, VOID,
+STATIC, CONST,
+ENUM, UNION,
+NEW, DELETE,
+USING, CAST,
+DECLTYPE, CLASS,
+MAIN,
+
+IF, ELSE,
+FOR, WHILE, DO,
+CONTINUE, BREAK,
+SWITCH, CASE, DEFAULT,
+RETURN,
+
+,, ., ;,
+?, :,
+->, ::,
+SIZEOF,
+(, ),
+[, ],
+{, },
+};
+token_type = token_t;
+get_type = getType;
+
+// O(): 0 or 1
+// N(): 1 or n
+// #(): 0 or n
+// S(E, op) = E #(op, E) = E op E ... E
+
+// start from here
+program := page main_function
+         | main_function;
+
+page := using_sentence
+      | struct_union_specifier ";"
+      | enumeration_specifier ";"
+      | function_definition
+      | function_declaration
+      | declaration;
+
+
+//expression := assignment_expression comma_assignment_expression_list;
+//declaration := declaration_specifier declarator_list ";";
+
+name := "id";
+type_name := type_qualifier_specifier type_specifier pointer_level             // [const] T (*)
+           | "DECLTYPE" "(" name ")" pointer_level;                            // static decltype(var)* i = &var
+
+// expression ---------------------------------------------------------------------------------------
+
+// Arithmetic --------------------------------
+primary_expression := name
+                    | "number_constant"
+                    | "str_literal"
+                    | "(" expression ")";
+
+unary_operator := "&"                                                          // access address
+                | "*"                                                          // dereference
+                | "!";
+post_fix := "++" 
+          | "--";
+post_fix_expression := primary_expression post_fix
+                     | primary_expression;
+pre_fix := "++"
+         | "--";
+//         | "SIZEOF";                                                         // shift-reduce collision
+pre_fix_sequence := pre_fix pre_fix_sequence;
+unary_operator_sequence := unary_operator unary_operator_sequence
+                         | ;
+unary_expression := unary_operator_sequence pre_fix_sequence post_fix_expression
+                  | unary_operator_sequence post_fix_expression
+                  | unary_operator_sequence cast_expression
+                  | unary_operator_sequence "SIZEOF" "(" type_name ")";
+cast_expression := "CAST" "<" type_name ">" "(" name ")";
+multiplicative_operator := "*" 
+                         | "%" 
+                         | "/";
+multiplicative_operator_cast_expression_sequence := multiplicative_operator cast_expression multiplicative_operator_cast_expression_sequence
+                                                  | ;                          // #(op E)
+multiplicative_expression := cast_expression multiplicative_operator_cast_expression_sequence; // S(E op)
+additive_operator := "+"
+                   | "-";
+additive_operator_multiplicative_expression_sequence := additive_operator multiplicative_expression additive_operator_multiplicative_expression_sequence
+                                                      | ;                      // #(op E)
+additive_expression := multiplicative_expression additive_operator_multiplicative_expression_sequence; // S(E op) This means that addition and subtraction occurs after multiplication and from left to right.
+
+// Shifts -------------------------------- 39
+shift_operator := ">>"
+                | "<<";
+shift_operator_additive_expression_seqence := shift_operator additive_expression shift_operator_additive_expression_seqence
+                                            | ;                                // #(op E)
+shift_expression :=additive_expression shift_operator_additive_expression_seqence; // S(E op)
+
+// Relations --------------------------------
+relational_operator := "<"
+                     | ">"
+                     | "<="
+                     | ">=";
+relational_operator_shift_expression_sequence := relational_operator shift_expression relational_operator_shift_expression_sequence
+                                               | ;                             // #(op E)
+relational_expression := shift_expression relational_operator_shift_expression_sequence;       // S(E op)
+equality_operator := "=="
+                   | "!=";
+equality_operator_relational_expression_sequence := equality_operator relational_expression equality_operator_relational_expression_sequence
+                                                  | ;                          // #(op E)
+equality_expression := relational_expression equality_operator_relational_expression_sequence; // S(E op)
+
+// Bitwise Expressions --------------------------------
+and_operator := "&";
+and_operator_equality_expression_sequence := and_operator equality_expression and_operator_equality_expression_sequence
+                                           | ;
+and_expression := equality_expression and_operator_equality_expression_sequence;
+xor_operator := "^";
+xor_operator_and_expression_sequence := xor_operator and_expression xor_operator_and_expression_sequence;
+                                      | ;
+xor_expression := and_expression xor_operator_and_expression_sequence;
+or_operator := "|";
+or_operator_xor_expression_sequence := or_operator xor_expression or_operator_xor_expression_sequence
+                                     | ;
+or_expression := xor_expression or_operator_xor_expression_sequence;
+
+// Logical Expressions --------------------------------
+logical_AND_operator := "&&" ;                                                 // A&&B, if A is false, B is not evaluated.
+logical_AND_operator_or_expression_sequence := logical_AND_operator or_expression logical_AND_operator_or_expression_sequence
+                                             | ;
+logical_AND_expression := or_expression logical_AND_operator_or_expression_sequence;
+logical_OR_operator := "||";                                                   // A||B, if A is true, B is not evaluated.
+logical_OR_operator_logical_AND_expression_sequence := logical_OR_operator logical_AND_expression logical_OR_operator_logical_AND_expression_sequence
+                                                     | ;
+logical_OR_expression := logical_AND_expression logical_OR_operator_logical_AND_expression_sequence;
+
+// Conditional Expressions --------------------------------
+conditional_expression := logical_OR_expression
+                        | logical_OR_expression "?" expression ":" conditional_expression;
+
+// Assignment Statements --------------------------------
+assignment_operator := "="
+                     | "*="
+                     | "/="
+                     | "%="
+                     | "+="
+                     | "<<="
+                     | ">>="
+                     | "&="
+                     | "^="
+                     | "|=";
+assignment_operator_unary_expression_sequence := assignment_operator unary_expression assignment_operator_unary_expression_sequence
+                                               | ;
+assignment_expression := unary_expression assignment_operator_unary_expression_sequence;
+comma_assignment_expression_list := "," assignment_expression comma_assignment_expression_list
+                                  | ;
+expression := assignment_expression comma_assignment_expression_list;          // comma expression ????????????????
+constant_expression := conditional_expression;                                 // what the hell it does ???
+
+
+
+// Decalration --------------------------------------------------------------------------------------
+
+storage_class := "STATIC";
+storage_class_specifier := storage_class
+                         | ;
+type_qualifier := "CONST";
+type_qualifier_specifier := type_qualifier
+                          | ;
+
+// [static] [const] type #(*)
+declaration_specifier := storage_class_specifier type_name;
+
+// int *a, b; is treated as int* a; int* b !!!!!!!!!!!!!!!!!
+declaration := declaration_specifier declarator_list ";";
+
+initializer := name "=" assignment_expression
+             | name post_declarator_sequence;
+comma_initializer_sequence := "," initializer comma_initializer_sequence
+                            | ;
+declarator_list := initializer comma_initializer_sequence;                     // i=a+=b, j=x, k[2]  S(E op)
+
+// Types --------------------------------
+struct_union := "STRUCT"
+              | "UNION";
+
+type_specifier := "VOID"                                                       // check void type
+                | "BOOLEAN"
+                | "CHAR"
+                | "I16"
+                | "I32"
+                | "U16"
+                | "U32"
+                | "F32"
+                | "F64"
+                | "STR"                                                        // String should be treated specially.
+                | "CLASS" name;                                                // for (struct, union, enum) type
+
+enumeration_value := name "=" "number_constant"
+                   | name;
+enumeration_list := enumeration_list "," enumeration_value
+                  | enumeration_value;
+enumeration_specifier := "ENUM" "id" "{" enumeration_list "}";
+
+
+using_sentence := "USING" name "=" type_specifier pointer_level ";";           // no const, no static. just T**
+declaration_sequence := declaration declaration_sequence
+                      | using_sentence declaration_sequence
+                      | ;
+
+
+struct_union_specifier := struct_union name
+                        | struct_union name "{"structure_declarator_list "}";
+structure_declarator_list := declaration_sequence;                             // only `using` and `declaration`
+
+pointer_level := "*" pointer_level                                             // #(*)
+               | ;
+
+post_declarator := "[" "number_constant" "]";
+post_declarator_sequence := post_declarator post_declarator_sequence
+                          | ;
+
+comma_declaration_sequence := "," type_name name comma_declaration_sequence    // , int i, const int* x
+                            | ;
+declaration_list := type_name name comma_declaration_sequence                  // a list(maybe empty) seperated by ,
+                  | ;
+
+// Functions --------------------------------
+
+function_definition := "FN" name "(" declaration_list ")" "->" type_name "{" compound_statement "}";
+function_declaration := "FN" name "(" declaration_list ")" "->" type_name ";";
+
+main_function := "FN" "MAIN" "(" "I32" name "," "CHAR" "*" "*" name ")" "->" "I32" "{" compound_statement "}"
+               | "FN" "MAIN" "(" ")" "->" "I32" "{" compound_statement "}";
+
+
+// Statements --------------------------------------------------------------------------------------
+
+expression_statement := expression ";"
+                      | ";";
+
+statemsent_sequence := statement statemsent_sequence
+                     | statement;
+
+compound_statement := statemsent_sequence                                      // note the difference from `one_or_block_statement`
+                    | "{" statemsent_sequence "}";
+
+statement := declaration
+           | expression_statement
+           | selection_statement
+           | iteration_statement
+           | jump_statement;
+
+// Branch --------------------------------
+jump_statement := "CONTINUE" ";"
+                | "BREAK" ";"
+                | "RETURN" expression ";"
+                | "RETURN" ";";
+
+one_or_block_statement := statement                                            // note the difference from `compound_statement`
+                        | "{" statemsent_sequence "}";
+
+iteration_statement := "WHILE" "(" expression ")" one_or_block_statement
+                     | "DO" one_or_block_statement "WHILE" "(" expression ")" ";"
+                     | for_statement;
+
+for_statement := "FOR" "(" declaration ";" expression ";" expression")" one_or_block_statement;
+
+selection_statement := if_statement;
+//                     | "SWITCH" "("expression")" one_or_block_statement;
+
+// for if reduce collision
+statement_without_if := declaration
+                      | expression_statement
+                      | iteration_statement
+                      | jump_statement;
+one_or_block_statement_without_if_ahead := statement_without_if
+                                         | "{" statemsent_sequence "}";
+
+if_statement := if_full
+              | if_lag;
+if_full_or_other := if_full                                                    // no if_lag
+                  | one_or_block_statement_without_if_ahead;
+if_full := "IF" "(" expression ")" if_full_or_other "ELSE" if_full_or_other;
+if_lag := "IF" "(" expression ")" if_full_or_other "ELSE" if_lag
+        | "IF" "(" expression ")" one_or_block_expression_statement;
+
+```
