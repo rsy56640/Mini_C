@@ -76,7 +76,10 @@ namespace Mini_C::lexer
 		ASSIGN,                                     // =
 		ADD_EQ, SUB_EQ, MUL_EQ, DIV_EQ, MOD_EQ,     // += -= *= /= %=
 		L_SHIFT_EQ, R_SHIFT_EQ,                     // <<= >>=
-		AND_EQ, OR_EQ, XOR_EQ,                      // &= |=
+		AND_EQ, OR_EQ, XOR_EQ,                      // &= |= ^=
+
+		/* Parser type */
+		NUMBER_CONSTANT, IDENTIFIER, STR_LITERAL,
 
 		/* numeric type */
 		BOOLEAN, CHAR, I16, I32,
@@ -88,7 +91,8 @@ namespace Mini_C::lexer
 		STATIC, CONST,
 		ENUM, UNION,
 		NEW, DELETE,
-		USING,
+		USING, CAST,
+		DECLTYPE, CLASS,
 		MAIN,
 
 		/* control statement */
@@ -117,7 +121,6 @@ namespace Mini_C::lexer
 		{ "<<", type::LEFT_SHIFT }, { ">>", type::RIGHT_SHIFT },
 		{ "~", type::NOT }, { "&", type::AND }, { "|", type::OR }, { "^", type::XOR },
 
-
 		{ "++", type::SELF_INC }, { "--", type::SELF_DEC },
 
 		/* logic operator */
@@ -133,6 +136,9 @@ namespace Mini_C::lexer
 		{ "<<=", type::L_SHIFT_EQ }, { ">>=", type::R_SHIFT_EQ },
 		{ "&=", type::AND_EQ }, { "|=", type::OR_EQ }, { "^=", type::XOR_EQ },
 
+		/* Parser type */
+		{ "num", type::NUMBER_CONSTANT }, { "id", type::IDENTIFIER }, { "str_literal", type::STR_LITERAL },
+
 		/* numeric type */
 		{ "bool", type::BOOLEAN }, { "char", type::CHAR }, { "i16", type::I16 }, { "i32", type::I32 },
 		{ "u16", type::U16 }, { "u32", type::U32 }, { "f32", type::F32 }, { "f64", type::F64 },
@@ -143,7 +149,8 @@ namespace Mini_C::lexer
 		{ "static", type::STATIC }, { "const", type::CONST },
 		{ "enum", type::ENUM }, { "union", type::UNION },
 		{ "new", type::NEW }, { "delete", type::DELETE },
-		{ "using", type::USING },
+		{ "using", type::USING }, { "cast", type::CAST },
+		{ "decltype", type::DECLTYPE }, { "class", type::CLASS },
 		{ "main", type::MAIN },
 
 		/* control statement */
@@ -188,6 +195,9 @@ namespace Mini_C::lexer
 		{ type::L_SHIFT_EQ, "<<=" }, { type::R_SHIFT_EQ, ">>=" },
 		{ type::AND_EQ, "&=" }, { type::OR_EQ, "|=" }, { type::XOR_EQ, "^=" },
 
+		/* Parser type */
+		{ type::NUMBER_CONSTANT, "num" }, { type::IDENTIFIER, "id" }, { type::STR_LITERAL, "str_literal" },
+
 		/* numeric type */
 		{ type::BOOLEAN, "bool" }, { type::CHAR, "char" }, { type::I16 , "i16" }, { type::I32, "i32" },
 		{ type::U16, "u16" }, { type::U32, "u32" }, { type::F32, "f32" }, { type::F64, "f64" },
@@ -198,7 +208,8 @@ namespace Mini_C::lexer
 		{ type::STATIC, "static" }, { type::CONST, "const" },
 		{ type::ENUM, "enum" }, { type::UNION, "union" },
 		{ type::NEW, "new" }, { type::DELETE, "delete" },
-		{ type::USING, "using" },
+		{ type::USING, "using" }, { type::CAST, "cast" },
+		{ type::DECLTYPE, "decltype" }, { type::CLASS, "class" },
 		{ type::MAIN, "main" },
 
 		/* control statement */

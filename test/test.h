@@ -32,7 +32,7 @@ namespace Mini_C::TEST
 	/*
 	 * return quoted type-string
 	 */
-	std::string outputType(const parser::value_t& _type);
+	 //std::string outputType(const parser::value_t& _type);
 
 
 }

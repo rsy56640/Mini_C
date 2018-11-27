@@ -39,6 +39,7 @@
 - [Kmotiko/DummyCCompiler](https://github.com/Kmotiko/DummyCCompiler)
 - [shiyanhui/Compiler - Compiler for C language in python](https://github.com/shiyanhui/Compiler)
 - [wgtdkp/wgtcc - A small C11 compiler in C++11](https://github.com/wgtdkp/wgtcc)
+- [General LR Parser(CMake,C++)](https://github.com/bajdcc/clibparser)
 - [drh/lcc - The lcc retargetable ANSI C compiler](https://github.com/drh/lcc)
 - [aamine/cbc - Cb (C flat) compiler. Cb is simplified C](https://github.com/aamine/cbc)
 - [c2nes/javalang - Pure Python Java parser and tools](https://github.com/c2nes/javalang)

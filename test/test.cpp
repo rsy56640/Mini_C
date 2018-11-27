@@ -64,9 +64,10 @@ namespace Mini_C::TEST
 		else std::cout << static_cast<int>(std::get<0>(_num));
 	}
 
+	/*
 	std::string outputType(const parser::value_t& _type)
 	{
 		return std::string();
-	}
+	}*/
 
 }// end namespace TEST
