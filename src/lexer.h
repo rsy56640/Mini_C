@@ -271,6 +271,7 @@ namespace Mini_C::lexer
 	/* Token struct
 	 *     members are all const.
 	 */
+#include <cassert>
 	struct Token
 	{
 		pos_t _pos;
@@ -283,14 +284,26 @@ namespace Mini_C::lexer
 			_token(std::get<token_t>(_token_info))
 		{}
 		Token(const Token&) = default;
-		Token& operator=(const Token&) & = default;
+		Token& operator=(const Token&) = default;
+		Token(Token&&) = default;
+		Token& operator=(Token&& other)
+		{
+			std::cerr << "WTF" << std::endl;
+			assert(false);
+			return *this;
+		}
 	};
+
+
+	lexer::type getType(const Token& token);
+
 
 	class Lexer
 	{
 	public:
 		void tokenize(const char* filename);
 		std::size_t size() const;
+		const Token& operator[](std::size_t pos) const { return _token_stream[pos]; }
 		bool empty() const;
 		Token getToken();       // only get, if no token, `throw MiniC_Universal_Exception`
 		void popToken();        // pop front, if no token, `throw MiniC_Universal_Exception`

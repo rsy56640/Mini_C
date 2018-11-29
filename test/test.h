@@ -21,12 +21,21 @@ namespace Mini_C::TEST
 	/*
 	 * print numeric value in form of formal format.
 	 */
-	void num_print(const lexer::numeric_t& _num) noexcept;
+	void num_print(const lexer::numeric_t& _num);
+
+	/*
+	 * output token_t
+	 */
+	void output_token_t(const lexer::token_t& token);
 
 	/*
 	 * output the token-list when used in debug mode.
 	 */
-	void outputLexVector(const std::vector<Mini_C::lexer::token_info> &result) noexcept;
+	void outputLexVector(const std::vector<Mini_C::lexer::token_info> &result);
+
+
+	void outputToken(const lexer::Token& token);
+	void outputTokenVector(const std::vector<lexer::Token>& tokens);
 
 
 	/*

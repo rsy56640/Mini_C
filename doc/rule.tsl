@@ -1,5 +1,5 @@
 ```tsl
-terminate = enum class tmn{
+terminate = enum class lexer::type {
 +, -, *, /, %, <<, >>,
 ~, &, |, ^,
 ++, --, 
@@ -42,8 +42,8 @@ SIZEOF,
 [, ],
 {, },
 };
-token_type = token_t;
-get_type = getType;
+token_type = lexer::Token;
+get_type = lexer::getType;
 
 // O(): 0 or 1
 // N(): 1 or n
@@ -54,12 +54,19 @@ get_type = getType;
 program := page main_function
          | main_function;
 
-page := using_sentence
+page := using_sentence 
       | struct_union_specifier ";"
       | enumeration_specifier ";"
       | function_definition
       | function_declaration
-      | declaration;
+      | declaration
+      | using_sentence page
+      | struct_union_specifier ";" page
+      | enumeration_specifier ";" page
+      | function_definition page
+      | function_declaration page
+      | declaration page
+      ;
 
 
 //expression := assignment_expression comma_assignment_expression_list;
@@ -72,10 +79,15 @@ type_name := type_qualifier_specifier type_specifier pointer_level             /
 // expression ---------------------------------------------------------------------------------------
 
 // Arithmetic --------------------------------
-primary_expression := name
+primary_expression := name_scope_operator_sequence array_access_sequence       // A::B::x[i][j]
                     | "number_constant"
                     | "str_literal"
-                    | "(" expression ")";
+                    | "(" expression ")"
+                    | pointer_access                                           // a->b->x[a->i]
+                    ;
+
+pointer_access := name "->" name array_access_sequence
+                | name "->" pointer_access;
 
 unary_operator := "&"                                                          // access address
                 | "*"                                                          // dereference
@@ -93,14 +105,19 @@ unary_operator_sequence := unary_operator unary_operator_sequence
 unary_expression := unary_operator_sequence pre_fix_sequence post_fix_expression
                   | unary_operator_sequence post_fix_expression
                   | unary_operator_sequence cast_expression
-                  | unary_operator_sequence "SIZEOF" "(" type_name ")";
-cast_expression := "CAST" "<" type_name ">" "(" name ")";
+                  | unary_operator_sequence "SIZEOF" "(" type_name ")"
+                  | unary_operator_sequence name "(" param_list ")"             // function invokation
+                  ;
+param_list := primary_expression                                                // parameter list
+            | param_list "," primary_expression
+            | ;
+cast_expression := "CAST" "<" type_name ">" "(" unary_expression ")";
 multiplicative_operator := "*" 
                          | "%" 
                          | "/";
-multiplicative_operator_cast_expression_sequence := multiplicative_operator cast_expression multiplicative_operator_cast_expression_sequence
+multiplicative_operator_unary_expression_sequence := multiplicative_operator unary_expression multiplicative_operator_unary_expression_sequence
                                                   | ;                          // #(op E)
-multiplicative_expression := cast_expression multiplicative_operator_cast_expression_sequence; // S(E op)
+multiplicative_expression := unary_expression multiplicative_operator_unary_expression_sequence; // S(E op)
 additive_operator := "+"
                    | "-";
 additive_operator_multiplicative_expression_sequence := additive_operator multiplicative_expression additive_operator_multiplicative_expression_sequence
@@ -112,7 +129,7 @@ shift_operator := ">>"
                 | "<<";
 shift_operator_additive_expression_seqence := shift_operator additive_expression shift_operator_additive_expression_seqence
                                             | ;                                // #(op E)
-shift_expression :=additive_expression shift_operator_additive_expression_seqence; // S(E op)
+shift_expression := additive_expression shift_operator_additive_expression_seqence; // S(E op)
 
 // Relations --------------------------------
 relational_operator := "<"
@@ -167,9 +184,9 @@ assignment_operator := "="
                      | "&="
                      | "^="
                      | "|=";
-assignment_operator_unary_expression_sequence := assignment_operator unary_expression assignment_operator_unary_expression_sequence
+assignment_operator_conditional_expression_sequence := assignment_operator conditional_expression assignment_operator_conditional_expression_sequence
                                                | ;
-assignment_expression := unary_expression assignment_operator_unary_expression_sequence;
+assignment_expression := conditional_expression assignment_operator_conditional_expression_sequence;
 comma_assignment_expression_list := "," assignment_expression comma_assignment_expression_list
                                   | ;
 expression := assignment_expression comma_assignment_expression_list;          // comma expression ????????????????
@@ -212,7 +229,12 @@ type_specifier := "VOID"                                                       /
                 | "F32"
                 | "F64"
                 | "STR"                                                        // String should be treated specially.
-                | "CLASS" name;                                                // for (struct, union, enum) type
+                | "CLASS" name_scope_operator_sequence                         // for (struct, union, enum) type
+                ;
+
+scope_operator := "::";
+name_scope_operator_sequence := name scope_operator name_scope_operator_sequence
+                              | name;
 
 enumeration_value := name "=" "number_constant"
                    | name;
@@ -237,6 +259,9 @@ pointer_level := "*" pointer_level                                             /
 post_declarator := "[" "number_constant" "]";
 post_declarator_sequence := post_declarator post_declarator_sequence
                           | ;
+array_access := "[" constant_expression "]";
+array_access_sequence := array_access array_access_sequence
+                       | ;
 
 comma_declaration_sequence := "," type_name name comma_declaration_sequence    // , int i, const int* x
                             | ;
@@ -282,12 +307,13 @@ iteration_statement := "WHILE" "(" expression ")" one_or_block_statement
                      | "DO" one_or_block_statement "WHILE" "(" expression ")" ";"
                      | for_statement;
 
-for_statement := "FOR" "(" declaration ";" expression ";" expression")" one_or_block_statement;
+for_statement := "FOR" "(" declaration_specifier declarator_list ";" expression ";" expression")" one_or_block_statement;
 
 selection_statement := if_statement;
 //                     | "SWITCH" "("expression")" one_or_block_statement;
 
-// for if reduce collision
+
+// for [dangling-else] reduce collision
 statement_without_if := declaration
                       | expression_statement
                       | iteration_statement
@@ -301,6 +327,6 @@ if_full_or_other := if_full                                                    /
                   | one_or_block_statement_without_if_ahead;
 if_full := "IF" "(" expression ")" if_full_or_other "ELSE" if_full_or_other;
 if_lag := "IF" "(" expression ")" if_full_or_other "ELSE" if_lag
-        | "IF" "(" expression ")" one_or_block_expression_statement;
+        | "IF" "(" expression ")" if_full_or_other;
 
 ```
