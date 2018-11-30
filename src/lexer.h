@@ -92,15 +92,15 @@ namespace Mini_C::lexer
 		ENUM, UNION,
 		NEW, DELETE,
 		USING, CAST,
-		DECLTYPE, CLASS,
+		DECLTYPE, TYPENAME, FUNC,
 		MAIN,
 
 		/* control statement */
 		IF, ELSE,
 		FOR, WHILE, DO,
 		CONTINUE, BREAK,
-		SWITCH, CASE, DEFAULT,
 		RETURN,
+		SYNCHRONIZED,
 
 		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
@@ -150,15 +150,15 @@ namespace Mini_C::lexer
 		{ "enum", type::ENUM }, { "union", type::UNION },
 		{ "new", type::NEW }, { "delete", type::DELETE },
 		{ "using", type::USING }, { "cast", type::CAST },
-		{ "decltype", type::DECLTYPE }, { "class", type::CLASS },
+		{ "decltype", type::DECLTYPE }, { "typename", type::TYPENAME }, { "func", type::FUNC },
 		{ "main", type::MAIN },
 
 		/* control statement */
 		{ "if", type::IF }, { "else", type::ELSE },
 		{ "for", type::FOR }, { "while", type::WHILE }, { "do", type::DO },
 		{ "continue", type::CONTINUE }, { "break", type::BREAK },
-		{ "switch", type::SWITCH }, { "case", type::CASE }, { "default", type::DEFAULT },
 		{ "return", type::RETURN },
+		{ "synchronized", type::SYNCHRONIZED },
 
 		/* other operator */
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
@@ -209,15 +209,15 @@ namespace Mini_C::lexer
 		{ type::ENUM, "enum" }, { type::UNION, "union" },
 		{ type::NEW, "new" }, { type::DELETE, "delete" },
 		{ type::USING, "using" }, { type::CAST, "cast" },
-		{ type::DECLTYPE, "decltype" }, { type::CLASS, "class" },
+		{ type::DECLTYPE, "decltype" }, { type::TYPENAME, "typename" }, { type::FUNC, "func" },
 		{ type::MAIN, "main" },
 
 		/* control statement */
 		{ type::IF, "if" }, { type::ELSE, "else" },
 		{ type::FOR, "for"}, { type::WHILE, "while" }, { type::DO, "do" },
 		{ type::CONTINUE, "continue" }, { type::BREAK, "break" },
-		{ type::SWITCH, "switch" }, { type::CASE, "case" }, { type::DEFAULT, "default" },
 		{ type::RETURN, "return" },
+		{ type::SYNCHRONIZED, "synchronized" },
 
 		/* other operator */
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },

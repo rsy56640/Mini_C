@@ -563,7 +563,7 @@ namespace Mini_C::lexer
 	 */
 	void Lexer::tokenize(const char* filename)
 	{
-		constexpr std::size_t MAXSIZE = 128;
+		constexpr std::size_t MAXSIZE = 256;
 		char buffer[MAXSIZE];
 		std::ifstream inputFile{ filename, std::ios::in };
 		if (!inputFile.is_open())

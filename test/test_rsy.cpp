@@ -8,9 +8,11 @@
 #include "../src/lexer.h"
 #include "../src/miniC_exception.h"
 #include "test.h"
-#include "../src/rule.h"
 #include <fstream>
 #include <iomanip>
+
+#define OUTPUT_DFA
+#include "../src/rule.h"
 
 void rsy_lexer_test()
 {
@@ -20,10 +22,12 @@ void rsy_lexer_test()
 	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
 	_lexer.print();
+	std::cout << "\n-----------------------------------------\n" << std::endl;
 
 	std::optional<std::pair<Mini_C::lexer::Token, std::string>> result =
 		Mini_C::LR1::analyze(_lexer);
-	if (result.has_value()) {
+	if (result.has_value())
+	{
 		auto const&[token, str] = result.value();
 		Mini_C::TEST::outputToken(token);
 		std::cout << str << std::endl;
@@ -66,7 +70,7 @@ void test()
 int main()
 {
 	::test();
-	std::getchar();
+	system("pause");
 	return 0;
 }
 #endif // RSY_TEST
