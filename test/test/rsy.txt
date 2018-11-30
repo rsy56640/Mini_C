@@ -31,7 +31,12 @@ union B {
 };
 
 fn fuck() -> i32;
-fn hoo(const typename A*, decltype(count)* i) -> void;
+fn hoo(const typename A* pa, decltype(count)* i) -> func<decltype(count)*(i32, void*)> {
+	using ret_t = func<decltype(count)*(i32, void*)>;
+	using high_order_t = func<typename ret_t(const typename A*)>;
+	func<typename high_order_t(i32)> f = xxx;
+	return f(*i)(pa);
+}
 
 fn foo(i32 i) -> typename A* {
 	typename A a;
@@ -39,6 +44,7 @@ fn foo(i32 i) -> typename A* {
 	hoo(&a);
 	return &a;
 }
+
 
 
 fn main()-> i32 
@@ -56,6 +62,10 @@ fn main()-> i32
 		if(i ==0){ break;}
 		else {continue;}
 	}
+
+	func<i32()> fuck_func = fuck;
+	i32 i = fuck_func();
+
 	static const f64 f= -.343_233+17 * 8_.23_ + A::_u;
 	b=-23 - -7- (-a)++ - -.723_233_9e-4+(0+(b-(b/(7.22)-4))-0u)+ --a.__x;
 	bool b = true | false || false & true;
@@ -74,10 +84,6 @@ fn joo(const typename A* a)-> decltype(foo(1))*;
 
 struct A;
 
-fn hoo(const typename A* a, i32*) -> void {
-	
-}
+fn joo(const typename A* a) -> void synchronized {
 
-fn joo(const typename A* a)-> typename A* synchronized {
-	
 }
