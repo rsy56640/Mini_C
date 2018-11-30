@@ -83,7 +83,7 @@ type_name := type_specifier pointer_level                                      /
 // expression ---------------------------------------------------------------------------------------
 
 // Arithmetic --------------------------------
-primary_expression := name_scope_operator_sequence  access_sequence            // A::B::x.a[p->i][foo()+2]->t
+primary_expression := name_scope_operator_sequence access_sequence             // A::B::x.a[p->i()][foo()+2]->t
                     | "number_constant"
                     | "str_literal"
                     | "(" expression ")"
@@ -93,8 +93,14 @@ member_access_operator := "->"
                         | ".";
 access_sequence := access_sequence member_access_operator name
                  | access_sequence "[" constant_expression "]"
+                 | access_sequence "(" ")"
+                 | access_sequence "(" param_list ")"
                  |
                  ;
+param_list := unary_expression                                                 // parameter list
+            | param_list "," unary_expression
+            ;
+
 
 unary_operator := "&"                                                          // access address
                 | "*"                                                          // dereference
@@ -116,18 +122,11 @@ unary_expression := unary_operator_sequence pre_fix_sequence post_fix_expression
                   | unary_operator_sequence post_fix_expression
                   | unary_operator_sequence cast_expression
                   | unary_operator_sequence "SIZEOF" "(" type_name ")"
-                  | unary_operator_sequence name "(" param_list ")"            // function invokation
-                  | unary_operator_sequence name "(" ")"
                   | pre_fix_sequence post_fix_expression
                   | post_fix_expression
                   | cast_expression
                   | "SIZEOF" "(" type_name ")"
-                  | name "(" param_list ")"
-                  | name "(" ")"
                   ;
-param_list := unary_expression                                                 // parameter list
-            | param_list "," unary_expression
-            ;
 cast_expression := "CAST" "<" type_name ">" "(" unary_expression ")";
 
 
