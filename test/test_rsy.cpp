@@ -10,7 +10,21 @@
 #include "test.h"
 #include <fstream>
 #include <iomanip>
+#include <fstream>
 
+std::ofstream os;
+const char* out_path = "C:/Users/lenovo/Source/Repos/___RulsTSL/x64/Release/result.lr1";
+auto ____ = []()
+{
+	os.open(out_path, std::ios::out | std::ios::trunc);
+	if (!os.is_open())
+	{
+		std::cout << "Can't open file: " << out_path << std::endl;
+		exit(0);
+	}
+	return 0;
+}();
+#define out os
 #define OUTPUT_DFA
 #include "../src/rule.h"
 
@@ -21,26 +35,18 @@ void rsy_lexer_test()
 	catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); std::cout << std::endl; }
 	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
-	_lexer.print();
-	std::cout << "\n-----------------------------------------\n" << std::endl;
+	_lexer.print(out);
+	out << "\n-----------------------------------------\n" << std::endl;
 
 	std::optional<std::pair<Mini_C::lexer::Token, std::string>> result =
 		Mini_C::LR1::analyze(_lexer);
 	if (result.has_value())
 	{
 		auto const&[token, str] = result.value();
-		Mini_C::TEST::outputToken(token);
-		std::cout << str << std::endl;
+		Mini_C::TEST::outputToken(token, out);
+		out << str << std::endl;
 	}
 	else std::cout << "ok" << std::endl;
-	/*
-	while (!_lexer.empty())
-	{
-		Mini_C::lexer::Token t = _lexer.consumeToken();
-		std::cout << "In line: " << t._line << ", pos: " << t._pos
-			<< type2str(getType(t)) << std::endl;;
-	}
-	*/
 }
 
 

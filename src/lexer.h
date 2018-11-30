@@ -111,6 +111,7 @@ namespace Mini_C::lexer
 		LEFT_SQUARE_BRACKETS, RIGHT_SQUARE_BRACKETS, // square brackets  : "[", "]"
 		LEFT_CURLY_BRACKETS, RIGHT_CURLY_BRACKETS,   // curly brackets   : "{", "}"
 
+		__EOF__,
 	};
 
 	type num_t2type(numeric_type num_t) noexcept;
@@ -169,6 +170,7 @@ namespace Mini_C::lexer
 		{ "[", type::LEFT_SQUARE_BRACKETS },  { "]", type::RIGHT_SQUARE_BRACKETS },
 		{ "{", type::LEFT_CURLY_BRACKETS },   { "}", type::RIGHT_CURLY_BRACKETS },
 
+		// { "$eof$", type::__EOF__ }, // no use
 	};
 
 	// for display
@@ -228,6 +230,7 @@ namespace Mini_C::lexer
 		{ type::LEFT_SQUARE_BRACKETS, "[" },  { type::RIGHT_SQUARE_BRACKETS, "]" },
 		{ type::LEFT_CURLY_BRACKETS, "{" },   { type::RIGHT_CURLY_BRACKETS, "}" },
 
+		{ type::__EOF__, "$eof$" },
 	};
 
 
@@ -308,7 +311,7 @@ namespace Mini_C::lexer
 		Token getToken();       // only get, if no token, `throw MiniC_Universal_Exception`
 		void popToken();        // pop front, if no token, `throw MiniC_Universal_Exception`
 		Token consumeToken();   // consume, if no token, `throw MiniC_Universal_Exception`
-		void print() const;     // for DEBUG
+		void print(std::ostream& out) const;     // for DEBUG
 		Lexer() = default;
 		Lexer(const Lexer&) = delete;
 		Lexer& operator=(const Lexer&) = delete;

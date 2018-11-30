@@ -521,7 +521,7 @@ analyzers::analyzer analyzer[] = {
 
 
 // for Lexer::print()
-namespace Mini_C::TEST { void num_print(const lexer::numeric_t& _num) noexcept; }
+namespace Mini_C::TEST { void num_print(const lexer::numeric_t& _num, std::ostream&); }
 
 
 namespace Mini_C::lexer
@@ -623,16 +623,16 @@ namespace Mini_C::lexer
 	}
 
 
-	void Lexer::print() const {
+	void Lexer::print(std::ostream& out) const {
 		for (Token const& token : _token_stream)
 		{
-			std::cout << "line: " << token._line << " \tpos:" << token._pos << "\t\t";
+			out << "line: " << token._line << " \tpos:" << token._pos << "\t\t";
 			std::visit(overloaded{
-					[](const Mini_C::lexer::type& _type) { std::cout << "type: " << "\t\t\t" << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
-					[](const Mini_C::lexer::identifier& _identifier) { std::cout << "identifier: " << "\t\t" << _identifier << std::endl; },
-					[](const Mini_C::lexer::numeric_t& _num) { std::cout << "numeric: " << "\t\t" << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<const Mini_C::lexer::numeric_type>(_num)))) << "\t"; TEST::num_print(_num); std::cout << std::endl; },
-					[](const Mini_C::lexer::string_literal_t& _str) { std::cout << "string literal: " << "\t" << std::quoted(std::get<const std::string>(_str)) << std::endl; },
-					[](auto) { std::cout << "WTF: tokenizer" << std::endl; },
+					[&out](const Mini_C::lexer::type& _type) { out << "type: " << "\t\t\t" << std::quoted(Mini_C::lexer::type2str(_type)) << std::endl; },
+					[&out](const Mini_C::lexer::identifier& _identifier) { out << "identifier: " << "\t\t" << _identifier << std::endl; },
+					[&out](const Mini_C::lexer::numeric_t& _num) { out << "numeric: " << "\t\t" << std::quoted(Mini_C::lexer::type2str(num_t2type(std::get<const Mini_C::lexer::numeric_type>(_num)))) << "\t"; TEST::num_print(_num, out); out << std::endl; },
+					[&out](const Mini_C::lexer::string_literal_t& _str) { out << "string literal: " << "\t" << std::quoted(std::get<const std::string>(_str)) << std::endl; },
+					[&out](auto) { out << "WTF: tokenizer" << std::endl; },
 				}, token._token);
 		}
 	}
