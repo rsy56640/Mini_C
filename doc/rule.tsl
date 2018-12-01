@@ -23,7 +23,7 @@ TRUE, FALSE,
 STRUCT, STR, FN, VOID,
 STATIC, CONST,
 ENUM, UNION,
-NEW, DELETE,
+NEW, DELETE, DELETE[],
 USING, CAST,
 DECLTYPE, TYPENAME, FUNC,
 MAIN,
@@ -207,7 +207,10 @@ declaration_specifier := "STATIC" type_name
 declaration := declaration_specifier declarator_list ";";
 
 initializer := name "=" assignment_expression
-             | name post_declarator_sequence;
+             | name "=" "NEW" type_name
+             | name "=" "NEW" type_name "[" constant_expression "]"
+             | name post_declarator_sequence
+             ;
 comma_initializer_sequence := comma_initializer_sequence "," initializer
                             | ;
 declarator_list := initializer comma_initializer_sequence;                     // i=b, j=x, k[2]  S(E op)
@@ -300,10 +303,16 @@ statement := declaration
            | jump_statement
            | if_statement
            | using_sentence
+           | delete_statement
            | synchronized_block
            ;
 
-// Branch --------------------------------
+// statement --------------------------------
+
+delete_statement := "DELETE" name_scope_operator_sequence access_sequence ";"
+                  | "DELETE[]" name_scope_operator_sequence access_sequence ";"
+                  ;
+
 jump_statement := "CONTINUE" ";"
                 | "BREAK" ";"
                 | "RETURN" expression ";"
