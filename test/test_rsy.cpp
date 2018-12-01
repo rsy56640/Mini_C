@@ -26,7 +26,7 @@ auto ____ = []()
 }();
 #define out os
 #define OUTPUT_DFA
-#include "../src/rule.h"
+#include "../src/lr1.hpp"
 
 void rsy_lexer_test()
 {
