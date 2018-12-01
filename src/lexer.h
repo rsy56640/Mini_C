@@ -92,7 +92,7 @@ namespace Mini_C::lexer
 		ENUM, UNION,
 		NEW, DELETE, DELETE_ARRAY,
 		USING, CAST,
-		DECLTYPE, TYPENAME, FUNC,
+		DECLTYPE, TYPENAME, FUNC, LAMBDA,
 		MAIN,
 
 		/* control statement */
@@ -100,7 +100,10 @@ namespace Mini_C::lexer
 		FOR, WHILE, DO,
 		CONTINUE, BREAK,
 		RETURN,
-		SYNCHRONIZED,
+
+		/* multi-thread */
+		SYNCHRONIZED, TID_T, MUTEX_T,
+		ONCE_FLAG,
 
 		/* other operator */
 		COMMA, PERIOD, SEMICOLON,                    // ",", ".", ";"
@@ -151,7 +154,7 @@ namespace Mini_C::lexer
 		{ "enum", type::ENUM }, { "union", type::UNION },
 		{ "new", type::NEW }, { "delete", type::DELETE }, { "delete[]", type::DELETE_ARRAY },
 		{ "using", type::USING }, { "cast", type::CAST },
-		{ "decltype", type::DECLTYPE }, { "typename", type::TYPENAME }, { "func", type::FUNC },
+		{ "decltype", type::DECLTYPE }, { "typename", type::TYPENAME }, { "func", type::FUNC }, { "lambda", type::LAMBDA },
 		{ "main", type::MAIN },
 
 		/* control statement */
@@ -159,7 +162,10 @@ namespace Mini_C::lexer
 		{ "for", type::FOR }, { "while", type::WHILE }, { "do", type::DO },
 		{ "continue", type::CONTINUE }, { "break", type::BREAK },
 		{ "return", type::RETURN },
-		{ "synchronized", type::SYNCHRONIZED },
+
+		/* multi-thread */
+		{ "synchronized", type::SYNCHRONIZED }, { "tid_t", type::TID_T }, { "mutex_t", type::MUTEX_T },
+		{ "once_flag", type::ONCE_FLAG },
 
 		/* other operator */
 		{ ",", type::COMMA }, { ".", type::PERIOD }, { ";", type::SEMICOLON },
@@ -211,7 +217,7 @@ namespace Mini_C::lexer
 		{ type::ENUM, "enum" }, { type::UNION, "union" },
 		{ type::NEW, "new" }, { type::DELETE, "delete" }, { type::DELETE_ARRAY, "delete[]" },
 		{ type::USING, "using" }, { type::CAST, "cast" },
-		{ type::DECLTYPE, "decltype" }, { type::TYPENAME, "typename" }, { type::FUNC, "func" },
+		{ type::DECLTYPE, "decltype" }, { type::TYPENAME, "typename" }, { type::FUNC, "func" }, { type::LAMBDA, "lambda" },
 		{ type::MAIN, "main" },
 
 		/* control statement */
@@ -219,7 +225,11 @@ namespace Mini_C::lexer
 		{ type::FOR, "for"}, { type::WHILE, "while" }, { type::DO, "do" },
 		{ type::CONTINUE, "continue" }, { type::BREAK, "break" },
 		{ type::RETURN, "return" },
-		{ type::SYNCHRONIZED, "synchronized" },
+
+		/* multi-thread */
+		{ type::SYNCHRONIZED, "synchronized" }, { type::TID_T, "tid_t" },{ type::MUTEX_T, "mutex_t" },
+		{ type::ONCE_FLAG, "once_flag" },
+
 
 		/* other operator */
 		{ type::COMMA, "," }, { type::PERIOD, "." }, {  type::SEMICOLON, ";" },

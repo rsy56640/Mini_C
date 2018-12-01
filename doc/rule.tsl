@@ -25,14 +25,16 @@ STATIC, CONST,
 ENUM, UNION,
 NEW, DELETE, DELETE[],
 USING, CAST,
-DECLTYPE, TYPENAME, FUNC,
+DECLTYPE, TYPENAME, FUNC, LAMBDA,
 MAIN,
 
 IF, ELSE,
 FOR, WHILE, DO,
 CONTINUE, BREAK,
 RETURN,
-SYNCHRONIZED,
+
+SYNCHRONIZED, TID_T, MUTEX_T,
+ONCE_FLAG,
 
 ,, ., ;,
 ?, :,
@@ -87,7 +89,17 @@ primary_expression := name_scope_operator_sequence access_sequence             /
                     | "number_constant"
                     | "str_literal"
                     | "(" expression ")"
+                    | lambda_expression
                     ;
+
+lambda_expression := "LAMBDA" "[" capture_list "]" "(" declaration_list_maybe_no_name ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+                   | "LAMBDA" "[" capture_list "]" "(" ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+                   ;
+capture_list := capture_list "," name_scope_operator_sequence
+              | name_scope_operator_sequence
+              | capture_list "," "&" name_scope_operator_sequence
+              | "&" name_scope_operator_sequence
+              | ;
 
 member_access_operator := "->"
                         | ".";
@@ -229,6 +241,9 @@ type_specifier := "VOID"                                                       /
                 | "F32"
                 | "F64"
                 | "STR"                                                        // String should be treated specially.
+                | "TID_T"
+                | "MUTEX_T"
+                | "ONCE_FLAG"
                 | "TYPENAME" name_scope_operator_sequence                      // for (struct, union, enum) type
                 | "FUNC" "<" type_name "(" ")" ">"
                 | "FUNC" "<" type_name "(" type_name_list ")" ">"

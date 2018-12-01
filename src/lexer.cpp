@@ -184,7 +184,7 @@ namespace Mini_C::lexer::analyzers {
 
 		// here uses a somehow ambiguous analyze process
 		// for that it does not need a rigid DFA for every single combinable openning character
-		while (supporters::isSecondCombinableOpearatorChar(s[pos++]));
+		while (supporters::isSecondCombinableOpearatorChar(s[++pos]));
 		// loop to change
 		keyword_it it;
 		for (; (it = keywords.find(string(s + begin, pos - begin))) == keywords.end(); --pos);

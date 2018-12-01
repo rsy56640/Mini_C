@@ -10,14 +10,16 @@ fn goo()-> typename B synchronized {
 
 struct A { 
 	static i32 _a;
-	i32 _b; 
-	using A_ptr_t = typename A*; 
+	i32 _b = 0;
+	using A_ptr_t = typename A*;
+	func<void(typename A*, i32)> foo = lambda[]()-> void {};
 };
 
 static i32 count = 0;
 
 fn foo(i32 i, const f64* f, typename B** b) -> typename A {
 	typename A a;
+	a.foo(&a, 0);
 	a._b = i;
 	synchronized {
         count++;
@@ -45,10 +47,17 @@ fn foo(i32 i) -> typename A* {
 	return &a;
 }
 
+fn syn_func(i32 i) -> void synchronized {
+    count++;
+}
 
 
 fn main()-> i32 
 {
+	i32 _b;
+	func<void(typename A*, i32)> foo = lambda[_b]()-> void {};
+    tid_t t0  = thread(syn_func, 233);
+    thread_join(t0);
 	typename A aObj;
 	decltype(aObj)* a = &aObj;
 	typename A a =*foo();
@@ -65,7 +74,8 @@ fn main()-> i32
 
 	func<i32()> fuck_func = fuck;
 	i32 i = fuck_func();
-
+	i32* p = new i32[fuck_func() + A::u->v];
+	delete p;
 	static const f64 f= -.343_233+17 * 8_.23_ + A::_u;
 	b=-23 - -7- (-a)++ - -.723_233_9e-4+(0+(b-(b/(7.22)-4))-0u)+ --a.__x;
 	bool b = true | false || false & true;
