@@ -1,0 +1,1375 @@
+#include <iostream>
+#include <deque>
+#include <queue>
+#include <string>
+#include <cassert>
+
+struct Node
+{
+	Node(std::string s) :content(std::move(s)) {}
+	std::deque<Node *> childs;
+	const std::string content;
+	int index;
+	void push_back(Node* child) { childs.push_back(child); }
+	~Node() {
+		for (Node* nptr : childs) {
+			delete nptr;
+		}
+	}
+};
+using Node_ptr = Node * ;
+
+void DotGen(Node_ptr root, std::ostream& out) {
+	int curIndex = 1;
+	std::queue<Node *> nodesToBeRead;
+	root->index = curIndex++;
+	nodesToBeRead.push(root);
+
+	out << "digraph tree{" << std::endl;
+
+	while (!nodesToBeRead.empty()) {
+		Node *currentNode = nodesToBeRead.front();
+		nodesToBeRead.pop();
+
+		for (Node_ptr p : currentNode->childs) {
+			p->index = curIndex++;
+			nodesToBeRead.push(p);
+			out << std::to_string(currentNode->index) + "->" + std::to_string(p->index) << std::endl;
+		}
+
+		out << std::to_string(currentNode->index) + "[label=\"" + currentNode->content + "\"];" << std::endl;
+	}
+
+	out << "}" << std::endl;
+}
+
+Node_ptr* getRoot() {
+	static Node_ptr root = nullptr;
+	return &root;
+}
+
+Node_ptr make_node(const char* name) { return new Node(name); }
+
+#define $$ __r
+#define MAKE_NODE(name) $$ = ::make_node(name)
+#define REDUCE(...) _reduce_($$, __VA_ARGS__)
+
+template<typename _Ty>
+void _reduce_(Node_ptr __root, _Ty arg)
+{
+	if constexpr(std::is_same_v<std::decay_t<_Ty>, Node_ptr>) {
+		__root->push_back(arg);
+	}
+	else {
+		static_assert(
+			std::is_same_v<std::decay_t<_Ty>, std::decay_t<const char*>>,
+			"Require const char* for terminate symbol");
+		__root->push_back(make_node(arg));
+	}
+}
+
+template<typename _Ty, typename ..._Rest>
+void _reduce_(Node_ptr __root, _Ty arg, _Rest... args)
+{
+	_reduce_(__root, arg);
+	_reduce_(__root, args...);
+}
+
+
+
+```tsl
+terminate = enum class lexer::type {
++, -, *, /, %, <<, >>,
+~, &, |, ^,
+++, --, 
+
+!, &&, ||,
+
+==, !=,
+<, >, <=, >=,
+
+=,
++=, -=, *=, /=, %=,
+<<=, >>=,
+&=, |=, ^=,
+
+number_constant, id, str_literal,
+
+BOOLEAN, CHAR, I16, I32,
+U16, U32, F32, F64,
+
+TRUE, FALSE,
+STRUCT, STR, FN, VOID,
+STATIC, CONST,
+ENUM, UNION,
+NEW, DELETE, DELETE[],
+USING, CAST,
+DECLTYPE, TYPENAME, FUNC, LAMBDA,
+MAIN,
+
+IF, ELSE,
+FOR, WHILE, DO,
+CONTINUE, BREAK,
+RETURN,
+
+SYNCHRONIZED, TID_T, MUTEX_T,
+ONCE_FLAG,
+
+,, ., ;,
+?, :,
+->, ::,
+SIZEOF,
+(, ),
+[, ],
+{, },
+};
+token_type = lexer::Token;
+get_type = lexer::getType;
+
+// O(): 0 or 1
+// N(): 1 or n
+// #(): 0 or n
+// S(E, op) = E #(op, E) = E op E ... E
+
+using type_qualifier= Node_ptr;
+using statement= Node_ptr;
+using page= Node_ptr;
+using post_fix_expression= Node_ptr;
+using storage_class_specifier= Node_ptr;
+using additive_operator= Node_ptr;
+using pre_fix= Node_ptr;
+using multiplicative_expression= Node_ptr;
+using post_declarator= Node_ptr;
+using for_statement= Node_ptr;
+using post_declarator_sequence= Node_ptr;
+using and_expression= Node_ptr;
+using storage_class= Node_ptr;
+using if_statement= Node_ptr;
+using func= Node_ptr;
+using selection_statement= Node_ptr;
+using unary_operator_sequence= Node_ptr;
+using jump_statement= Node_ptr;
+using statement_without_if= Node_ptr;
+using statemsent_sequence= Node_ptr;
+using declaration_specifier= Node_ptr;
+using type_name_list= Node_ptr;
+using shift_expression= Node_ptr;
+using compound_statement= Node_ptr;
+using declaration_list= Node_ptr;
+using declaration_sequence= Node_ptr;
+using main_function= Node_ptr;
+using comma_declaration_sequence= Node_ptr;
+using program= Node_ptr;
+using structure_declarator_list= Node_ptr;
+using iteration_statement= Node_ptr;
+using name= Node_ptr;
+using enumeration_value= Node_ptr;
+using additive_expression= Node_ptr;
+using constant_expression= Node_ptr;
+using struct_union= Node_ptr;
+using initializer= Node_ptr;
+using comma_assignment_expression_list= Node_ptr;
+using assignment_expression= Node_ptr;
+using list= Node_ptr;
+using logical_AND_expression= Node_ptr;
+using relational_expression= Node_ptr;
+using shift_operator= Node_ptr;
+using access_sequence= Node_ptr;
+using if_lag= Node_ptr;
+using function_definition= Node_ptr;
+using declaration= Node_ptr;
+using multiplicative_operator= Node_ptr;
+using expression_statement= Node_ptr;
+using enumeration_list= Node_ptr;
+using xor_expression= Node_ptr;
+using unary_expression= Node_ptr;
+using or_expression= Node_ptr;
+using pre_fix_sequence= Node_ptr;
+using enumeration_specifier= Node_ptr;
+using declarator_list= Node_ptr;
+using expression= Node_ptr;
+using using_sentence= Node_ptr;
+using assignment_operator= Node_ptr;
+using post_fix= Node_ptr;
+using type_name= Node_ptr;
+using cast_expression= Node_ptr;
+using primary_expression= Node_ptr;
+using pointer_level= Node_ptr;
+using name_scope_operator_sequence= Node_ptr;
+using comma_initializer_sequence= Node_ptr;
+using type_specifier= Node_ptr;
+using param_list= Node_ptr;
+using if_full= Node_ptr;
+using member_access_operator= Node_ptr;
+using struct_union_specifier= Node_ptr;
+using unary_operator = Node_ptr;
+using logical_OR_expression = Node_ptr;
+using one_or_block_statement = Node_ptr;
+using function_declaration = Node_ptr;
+using type_qualifier_specifier = Node_ptr;
+using conditional_expression = Node_ptr;
+using relational_operator = Node_ptr;
+using parameter = Node_ptr;
+using start = Node_ptr;
+using lambda_expression = Node_ptr;
+using capture_list = Node_ptr;
+using declaration_list_maybe_no_name = Node_ptr;
+using statemsent_sequence_maybe_null = Node_ptr;
+using synchronized_block = Node_ptr;
+using delete_statement = Node_ptr;
+
+
+// start from here
+start := program { *getRoot() = new Node("start"); (*getRoot())->push_back($1); }
+
+program := page main_function page
+          {
+            MAKE_NODE("program");
+            REDUCE($1, $2, $3);
+          }
+         | page main_function
+         {
+            MAKE_NODE("program");
+            REDUCE($1, $2);
+         }
+         | main_function page
+         {
+            MAKE_NODE("program");
+            REDUCE($1, $2);
+         }
+         | main_function
+         {
+            MAKE_NODE("program");
+            REDUCE($1);
+         }
+
+page := using_sentence
+      {
+        MAKE_NODE("page");
+        REDUCE($1);
+      } 
+      | struct_union_specifier ";"
+      {
+        MAKE_NODE("page");
+        REDUCE($1, ";");
+      }
+      | enumeration_specifier ";"
+      {
+        MAKE_NODE("page");
+        REDUCE($1, ";");
+      }
+      | function_definition
+      {
+        MAKE_NODE("page");
+        REDUCE($1);
+      }
+      | function_declaration
+      {
+        MAKE_NODE("page");
+        REDUCE($1);
+      }
+      | declaration
+      {
+        MAKE_NODE("page");
+        REDUCE($1);
+      }
+      | page using_sentence
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2);
+      }
+      | page struct_union_specifier ";"
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2, ";");
+      }
+      | page enumeration_specifier ";"
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2, ";");
+      }
+      | page function_definition
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2);
+      }
+      | page function_declaration
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2);
+      }
+      | page declaration
+      {
+        MAKE_NODE("page");
+        REDUCE($1, $2);
+      }
+
+name := "id"
+      {
+        MAKE_NODE("name");
+        REDUCE("id");
+      }
+
+type_name := type_specifier pointer_level                                      // [const] T (*)
+            {
+              MAKE_NODE("type_name");
+              REDUCE($1, $2);
+            }
+           | "CONST" type_specifier pointer_level
+            {
+              MAKE_NODE("type_name");
+              REDUCE("CONST", $2, $3);
+            }
+           | "DECLTYPE" "(" unary_expression ")" pointer_level                 // static decltype(var)* i = &var
+          {
+            MAKE_NODE("type_name");
+            REDUCE("DECLTYPE", "(", $3, ")", $5);
+          }
+
+// expression ---------------------------------------------------------------------------------------
+
+// Arithmetic --------------------------------
+primary_expression := name_scope_operator_sequence access_sequence             // A::B::x.a[p->i()][foo()+2]->t
+{
+  MAKE_NODE("primary_expression");
+  REDUCE($1, $2);
+}
+                    | "number_constant"
+                    {
+                      MAKE_NODE("primary_expression");
+                      REDUCE("number_constant");
+                    }
+                    | "str_literal"
+                    {
+                      MAKE_NODE("primary_expression");
+                      REDUCE("str_literal");
+                    }
+                    | "(" expression ")"
+                    {
+                      MAKE_NODE("primary_expression");
+                      REDUCE("(", $2, ")");
+                    }
+                    | lambda_expression
+                    {
+                      MAKE_NODE("primary_expression");
+                      REDUCE($1);
+                    }
+
+lambda_expression := "LAMBDA" "[" capture_list "]" "(" declaration_list_maybe_no_name ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("lambda_expression");
+  REDUCE("LAMBDA", "[", $3, "]", "(", $6, ")", "->", $9, "{", $11, "}");
+}
+                   | "LAMBDA" "[" capture_list "]" "(" ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+                   {
+                      MAKE_NODE("lambda_expression");
+                      REDUCE("LAMBDA", "[", $3, "]", "(", ")", "->", $8, "{", $10, "}");
+                   }
+capture_list := capture_list "," name_scope_operator_sequence
+{
+  MAKE_NODE("capture_list");
+  REDUCE($1, ",", $3);
+}
+              | name_scope_operator_sequence
+              {
+                MAKE_NODE("capture_list");
+                REDUCE($1);
+              }
+              | capture_list "," "&" name_scope_operator_sequence
+              {
+                MAKE_NODE("capture_list");
+                REDUCE($1, ",", "&", $4);
+              }
+              | "&" name_scope_operator_sequence
+              {
+                MAKE_NODE("capture_list");
+                REDUCE("&", $2);
+              }
+              |
+              {
+                MAKE_NODE("capture_list");
+              } 
+
+member_access_operator := "->"
+{
+  MAKE_NODE("member_access_operator");
+  REDUCE("->");
+}
+                        | "."
+                        {
+                          MAKE_NODE("member_access_operator");
+                          REDUCE(".");
+                        }
+                        ;
+
+access_sequence := access_sequence member_access_operator name
+{
+  MAKE_NODE("access_sequence");
+  REDUCE($1, $2, $3);
+}
+                 | access_sequence "[" constant_expression "]"
+{
+  MAKE_NODE("access_sequence");
+  REDUCE($1, "[", $3, "]");
+}
+                 | access_sequence "(" ")"
+{
+  MAKE_NODE("access_sequence");
+  REDUCE($1, "(", ")");
+}
+                 | access_sequence "(" param_list ")"
+{
+  MAKE_NODE("access_sequence");
+  REDUCE($1, "(", $3, ")");
+}
+                 |
+{
+  MAKE_NODE("access_sequence");
+}
+
+
+param_list := unary_expression                                                 // parameter list
+{
+  MAKE_NODE("param_list");
+  REDUCE($1);
+}
+            | param_list "," unary_expression
+{
+  MAKE_NODE("param_list");
+  REDUCE($1, ",", $3);
+}
+
+
+unary_operator := "&"                                                          // access address
+{
+  MAKE_NODE("unary_operator");
+  REDUCE("&");
+}
+                | "*"                                                          // dereference
+{
+  MAKE_NODE("unary_operator");
+  REDUCE("*");
+}
+                | "!"
+{
+  MAKE_NODE("unary_operator");
+  REDUCE("!");
+}
+                | "-"
+{
+  MAKE_NODE("unary_operator");
+  REDUCE("-");
+}
+
+
+post_fix := "++"
+{
+  MAKE_NODE("post_fix");
+  REDUCE("++");
+}
+          | "--"
+{
+  MAKE_NODE("post_fix");
+  REDUCE("--");
+}
+
+
+post_fix_expression := primary_expression post_fix
+{
+  MAKE_NODE("post_fix_expression");
+  REDUCE($1, $2);
+}
+                     | primary_expression
+{
+  MAKE_NODE("post_fix_expression");
+  REDUCE($1);
+}
+
+pre_fix := "++"
+{
+  MAKE_NODE("pre_fix");
+  REDUCE("++");
+}
+         | "--"
+{
+  MAKE_NODE("pre_fix");
+  REDUCE("--");
+}
+         ;
+//         | "SIZEOF";                                                         // shift-reduce collision
+
+pre_fix_sequence := pre_fix pre_fix_sequence
+{
+  MAKE_NODE("pre_fix_sequence");
+  REDUCE($1, $2);
+}
+                  | pre_fix
+{
+  MAKE_NODE("pre_fix_sequence");
+  REDUCE($1);
+}
+                  ;
+
+unary_operator_sequence := unary_operator unary_operator_sequence
+{
+  MAKE_NODE("unary_operator_sequence");
+  REDUCE($1, $2);
+}
+                         | unary_operator
+{
+  MAKE_NODE("unary_operator_sequence");
+  REDUCE($1);
+}
+                         ;
+
+unary_expression := unary_operator_sequence pre_fix_sequence post_fix_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1, $2, $3);
+}
+                  | unary_operator_sequence post_fix_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1, $2);
+}
+                  | unary_operator_sequence cast_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1, $2);
+}
+                  | unary_operator_sequence "SIZEOF" "(" type_name ")"
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1, "SIZEOF", "(", $4, ")");
+}
+                  | pre_fix_sequence post_fix_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1, $2);
+}
+                  | post_fix_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1);
+}
+                  | cast_expression
+{
+  MAKE_NODE("unary_expression");
+  REDUCE($1);
+}
+                  | "SIZEOF" "(" type_name ")"
+{
+  MAKE_NODE("unary_expression");
+  REDUCE("SIZEOF", "(", $3, ")");
+}
+                  ;
+
+cast_expression := "CAST" "<" type_name ">" "(" unary_expression ")"
+{
+  MAKE_NODE("cast_expression");
+  REDUCE("CAST", "<", $3, ">", "(", $6, ")");
+}
+;
+
+
+multiplicative_operator := "*" 
+{
+  MAKE_NODE("multiplicative_operator");
+  REDUCE("*");
+}
+                         | "%" 
+{
+  MAKE_NODE("multiplicative_operator");
+  REDUCE("%");
+}
+                         | "/"
+{
+  MAKE_NODE("multiplicative_operator");
+  REDUCE("/");
+}
+;
+
+multiplicative_expression := multiplicative_expression multiplicative_operator unary_expression
+{
+  MAKE_NODE("multiplicative_expression");
+  REDUCE($1, $2, $3);
+}
+                           | unary_expression
+{
+  MAKE_NODE("multiplicative_expression");
+  REDUCE($1);
+}
+;
+
+additive_operator := "+"
+{
+  MAKE_NODE("additive_operator");
+  REDUCE("+");
+}
+                   | "-"
+{
+  MAKE_NODE("additive_operator");
+  REDUCE("-");
+}
+;
+
+additive_expression := additive_expression additive_operator multiplicative_expression
+{
+  MAKE_NODE("additive_expression");
+  REDUCE($1, $2, $3);
+}
+                     | multiplicative_expression
+{
+  MAKE_NODE("additive_expression");
+  REDUCE($1);
+}
+;
+
+// Shifts -------------------------------- 39
+shift_operator := ">>"
+{
+  MAKE_NODE("shift_operator");
+  REDUCE(">>");
+}
+                | "<<"
+{
+  MAKE_NODE("additive_operator");
+  REDUCE("<<");
+}
+;
+
+shift_expression := shift_expression shift_operator additive_expression
+{
+  MAKE_NODE("shift_expression");
+  REDUCE($1, $2, $3);
+}
+                  | additive_expression
+{
+  MAKE_NODE("additive_expression");
+  REDUCE($1);
+}
+;
+
+// Relations --------------------------------
+relational_operator := "<"
+{
+  MAKE_NODE("relational_operator");
+  REDUCE("<");
+}
+                     | ">"
+{
+  MAKE_NODE("relational_operator");
+  REDUCE(">");
+}
+                     | "<="
+{
+  MAKE_NODE("relational_operator");
+  REDUCE("<=");
+}
+                     | ">="
+{
+  MAKE_NODE("relational_operator");
+  REDUCE(">=");
+}
+                     | "=="
+{
+  MAKE_NODE("relational_operator");
+  REDUCE("==");
+}
+                     | "!="
+{
+  MAKE_NODE("relational_operator");
+  REDUCE("!=");
+}
+                     ;
+
+relational_expression := shift_expression relational_operator shift_expression
+{
+  MAKE_NODE("relational_expression");
+  REDUCE($1, $2, $3);
+}
+                       | shift_expression
+{
+  MAKE_NODE("relational_expression");
+  REDUCE($1);
+}
+;
+
+// Bitwise Expressions --------------------------------
+and_expression := and_expression "&" relational_expression
+{
+  MAKE_NODE("and_expression");
+  REDUCE($1, "&", $3);
+}
+                | relational_expression
+{
+  MAKE_NODE("and_expression");
+  REDUCE($1);
+}
+;
+
+xor_expression := xor_expression "^" and_expression
+{
+  MAKE_NODE("xor_expression");
+  REDUCE($1, "^", $3);
+}
+                | and_expression
+{
+  MAKE_NODE("xor_expression");
+  REDUCE($1);
+}
+;
+
+or_expression := or_expression "|" xor_expression
+{
+  MAKE_NODE("or_expression");
+  REDUCE($1, "|", $3);
+}
+               | xor_expression
+{
+  MAKE_NODE("or_expression");
+  REDUCE($1);
+}
+;
+
+// Logical Expressions --------------------------------                                          
+logical_AND_expression := logical_AND_expression "&&" or_expression            // A&&B, if A is false, B is not evaluated.
+{
+  MAKE_NODE("logical_AND_expression");
+  REDUCE($1, "&&", $3);
+}
+                        | or_expression
+{
+  MAKE_NODE("logical_AND_expression");
+  REDUCE($1);
+}
+;
+
+logical_OR_expression := logical_OR_expression "||" logical_AND_expression     // A||B, if A is true, B is not evaluated.
+{
+  MAKE_NODE("logical_OR_expression");
+  REDUCE($1, "||", $3);
+}
+                       | logical_AND_expression
+{
+  MAKE_NODE("logical_OR_expression");
+  REDUCE($1);
+}
+;
+
+// Conditional Expressions --------------------------------
+conditional_expression := logical_OR_expression "?" expression ":" logical_OR_expression
+{
+  MAKE_NODE("conditional_expression");
+  REDUCE($1, "?", $3, ":", $5);
+}
+                        | logical_OR_expression
+{
+  MAKE_NODE("conditional_expression");
+  REDUCE($1);
+}
+
+// Assignment Statements --------------------------------
+assignment_operator := "="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("=");
+}
+                     | "*="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("*=");
+}
+                     | "/="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("/=");
+}
+                     | "%="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("%=");
+}
+                     | "+="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("+=");
+}
+                     | "<<="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("<<=");
+}
+                     | ">>="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE(">>=");
+}
+                     | "&="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("&=");
+}
+                     | "^="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("^=");
+}
+                     | "|="
+{
+  MAKE_NODE("assignment_operator");
+  REDUCE("|=");
+}
+                     ;
+
+assignment_expression := conditional_expression assignment_operator conditional_expression
+{
+  MAKE_NODE("assignment_expression");
+  REDUCE($1, $2, $3);
+}
+                       | conditional_expression
+{
+  MAKE_NODE("assignment_expression");
+  REDUCE($1);
+}
+;
+
+expression := expression "," assignment_expression
+{
+  MAKE_NODE("expression");
+  REDUCE($1, ",", $3);
+}
+            | assignment_expression
+{
+  MAKE_NODE("expression");
+  REDUCE($1);
+}
+
+constant_expression := conditional_expression                                  // what the hell it does ???
+{
+  MAKE_NODE("constant_expression");
+  REDUCE($1);
+}
+
+
+
+// Decalration --------------------------------------------------------------------------------------
+
+// [static] [const] type #(*)
+declaration_specifier := "STATIC" type_name
+{
+  MAKE_NODE("declaration_specifier");
+  REDUCE("STATIC", $2);
+}
+                       | type_name
+{
+  MAKE_NODE("declaration_specifier");
+  REDUCE($1);
+}
+                       ;
+
+// int *a, b; is treated as int* a; int* b !!!!!!!!!!!!!!!!!
+declaration := declaration_specifier declarator_list ";"
+{
+  MAKE_NODE("declaration");
+  REDUCE($1, $2, ";");
+}
+
+initializer := name "=" assignment_expression
+{
+  MAKE_NODE("initializer");
+  REDUCE($1, "=", $3);
+}
+             | name "=" "NEW" type_name
+{
+  MAKE_NODE("initializer");
+  REDUCE($1, "=", "NEW", $4);
+}
+             | name "=" "NEW" type_name "[" constant_expression "]"
+{
+  MAKE_NODE("initializer");
+  REDUCE($1, "=", "NEW", $4, "[", $6, "]");
+}
+             | name post_declarator_sequence
+{
+  MAKE_NODE("initializer");
+  REDUCE($1, $2);
+}
+             ;
+comma_initializer_sequence := comma_initializer_sequence "," initializer
+{
+  MAKE_NODE("comma_initializer_sequence");
+  REDUCE($1, ",", $3);
+}
+                            | 
+{
+  MAKE_NODE("comma_initializer_sequence");
+}
+                            ;
+declarator_list := initializer comma_initializer_sequence                      // i=b, j=x, k[2]  S(E op)
+{
+  MAKE_NODE("declarator_list");
+  REDUCE($1, $2);
+}
+
+// Types --------------------------------
+struct_union := "STRUCT"
+{
+  MAKE_NODE("struct_union");
+  REDUCE("STRUCT");
+}
+              | "UNION"
+{
+  MAKE_NODE("struct_union");
+  REDUCE("UNION");
+}
+;
+
+type_specifier := "VOID"                                                       // check void type
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("VOID");
+}
+                | "BOOLEAN"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("BOOLEAN");
+}
+                | "CHAR"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("CHAR");
+}
+                | "I16"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("I16");
+}
+                | "I32"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("I32");
+}
+                | "U16"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("U16");
+}
+                | "U32"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("U32");
+}
+                | "F32"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("F32");
+}
+                | "F64"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("F64");
+}
+                | "STR"                                                        // String should be treated specially.
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("STR");
+}
+                | "TID_T"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("TID_T");
+}
+                | "MUTEX_T"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("MUTEX_T");
+}
+                | "ONCE_FLAG"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("ONCE_FLAG");
+}
+                | "TYPENAME" name_scope_operator_sequence                      // for (struct, union, enum) type
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("TYPENAME", $2);
+}
+                | "FUNC" "<" type_name "(" ")" ">"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("FUNC", "<", $3, "(", ")", ">");
+}
+                | "FUNC" "<" type_name "(" type_name_list ")" ">"
+{
+  MAKE_NODE("type_specifier");
+  REDUCE("FUNC", "<", $3, "(", $5, ")", ">");
+}
+                ;
+
+name_scope_operator_sequence := name_scope_operator_sequence "::" name
+{
+  MAKE_NODE("name_scope_operator_sequence");
+  REDUCE($1, "::", $3);
+}
+                              | name
+{
+  MAKE_NODE("name_scope_operator_sequence");
+  REDUCE($1);
+}
+;
+
+type_name_list := type_name_list "," type_name
+{
+  MAKE_NODE("type_name_list");
+  REDUCE($1, ",", $3);
+}
+                | type_name
+{
+  MAKE_NODE("type_name_list");
+  REDUCE($1);
+}
+;
+
+enumeration_value := name "=" "number_constant"
+{
+  MAKE_NODE("enumeration_value");
+  REDUCE($1, "=", "number_constant");
+}
+                   | name
+{
+  MAKE_NODE("enumeration_value");
+  REDUCE($1);
+}
+;
+
+enumeration_list := enumeration_list "," enumeration_value
+{
+  MAKE_NODE("enumeration_list");
+  REDUCE($1, ",", $3);
+}
+                  | enumeration_value
+{
+  MAKE_NODE("enumeration_list");
+  REDUCE($1);
+}
+;
+
+enumeration_specifier := "ENUM" "id" "{" enumeration_list "}"
+{
+  MAKE_NODE("enumeration_specifier");
+  REDUCE("ENUM", "id", "{", $4, "}");
+}
+;
+
+
+using_sentence := "USING" name "=" type_specifier pointer_level ";"            // no const, no static. just T**
+{
+  MAKE_NODE("using_sentence");
+  REDUCE("USING", $2, "=", $4, $5, ";");
+}
+                | "USING" name "=" "DECLTYPE" "(" constant_expression ")" pointer_level ";"
+{
+  MAKE_NODE("using_sentence");
+  REDUCE("USING", $2, "=", "DECLTYPE", "(", $6, ")", $8, ";");
+}
+                ;
+
+declaration_sequence := declaration_sequence declaration
+{
+  MAKE_NODE("declaration_sequence");
+  REDUCE($1, $2);
+}
+                      | declaration_sequence using_sentence
+{
+  MAKE_NODE("declaration_sequence");
+  REDUCE($1, $2);
+}
+                      | 
+{
+  MAKE_NODE("declaration_sequence");
+}
+;
+
+
+struct_union_specifier := struct_union name
+{
+  MAKE_NODE("struct_union_specifier");
+  REDUCE($1, $2);
+}
+                        | struct_union name "{" structure_declarator_list "}"
+{
+  MAKE_NODE("struct_union_specifier");
+  REDUCE($1, $2, "{", $4, "}");
+}
+;
+
+structure_declarator_list := declaration_sequence                             // only `using` and `declaration`
+{
+  MAKE_NODE("structure_declarator_list");
+  REDUCE($1);
+}
+;
+
+pointer_level := "*" pointer_level                                             // #(*)
+{
+  MAKE_NODE("pointer_level");
+  REDUCE("*", $2);
+}
+               | 
+{
+  MAKE_NODE("pointer_level");
+}
+;
+
+post_declarator := "[" "number_constant" "]"
+{
+  MAKE_NODE("post_declarator");
+  REDUCE("[", "number_constant", "]");
+}
+;
+
+post_declarator_sequence := post_declarator_sequence post_declarator
+{
+  MAKE_NODE("post_declarator_sequence");
+  REDUCE($1, $2);
+}
+                          | 
+{
+  MAKE_NODE("post_declarator_sequence");
+}
+;
+
+// Functions --------------------------------
+
+declaration_list_maybe_no_name := declaration_list_maybe_no_name "," type_name
+{
+  MAKE_NODE("declaration_list_maybe_no_name");
+  REDUCE($1, ",", $3);
+}
+                                | declaration_list_maybe_no_name "," type_name name
+{
+  MAKE_NODE("declaration_list_maybe_no_name");
+  REDUCE($1, ",", $3, $4);
+}
+                                | type_name
+{
+  MAKE_NODE("declaration_list_maybe_no_name");
+  REDUCE($1);
+}
+                                | type_name name
+{
+  MAKE_NODE("declaration_list_maybe_no_name");
+  REDUCE($1, $2);
+}
+                                ;
+
+function_definition := "FN" name "(" declaration_list_maybe_no_name ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("function_definition");
+  REDUCE("FN", $2, "(", $4, ")", "->", $7, "{", $9, "}");
+}
+                     | "FN" name "(" ")" "->" type_name "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("function_definition");
+  REDUCE("FN", $2, "(", ")", "->", $6, "{", $8, "}");
+}
+                     | "FN" name "(" declaration_list_maybe_no_name ")" "->" type_name "SYNCHRONIZED" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("function_definition");
+  REDUCE("FN", $2, "(", $4, ")", "->", $7, "SYNCHRONIZED", "{", $10, "}");
+}
+                     | "FN" name "(" ")" "->" type_name "SYNCHRONIZED" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("function_declaration");
+  REDUCE("FN", $2, "(", ")", "->", $6, "SYNCHRONIZED", "{", $9, "}");
+}
+                     ;
+
+function_declaration := "FN" name "(" declaration_list_maybe_no_name ")" "->" type_name ";"
+{
+  MAKE_NODE("function_declaration");
+  REDUCE("FN", $2, "(", $4, ")", "->", $7, ";");
+}
+                      | "FN" name "(" ")" "->" type_name ";"
+{
+  MAKE_NODE("function_declaration");
+  REDUCE("FN", $2, "(", ")", "->", $6, ";");
+}
+                      ;
+
+main_function := "FN" "MAIN" "(" "I32" name "," "CHAR" "*" "*" name ")" "->" "I32" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("main_function");
+  REDUCE("FN", "MAIN", "(", "I32", $5, ",", "CHAR", "*", "*", $10, ")", "->", "I32", "{", $15, "}");
+}
+               | "FN" "MAIN" "(" ")" "->" "I32" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("main_function");
+  REDUCE("FN", "MAIN", "(", ")", "->", "I32", "{", $8, "}");
+}
+;
+
+
+// Statements --------------------------------------------------------------------------------------
+
+expression_statement := expression ";"
+{
+  MAKE_NODE("expression_statement");
+  REDUCE($1, ";");
+}
+                      | ";"
+{
+  MAKE_NODE("expression_statement");
+  REDUCE(";");
+}
+;
+
+statemsent_sequence_maybe_null := statemsent_sequence_maybe_null statement
+{
+  MAKE_NODE("statemsent_sequence_maybe_null");
+  REDUCE($1, $2);
+}
+                                | 
+{
+  MAKE_NODE("statemsent_sequence_maybe_null");
+}
+;
+
+statement := declaration
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | expression_statement
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | iteration_statement
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | jump_statement
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | if_statement
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | using_sentence
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | delete_statement
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           | synchronized_block
+{
+  MAKE_NODE("statement");
+  REDUCE($1);
+}
+           ;
+
+// statement --------------------------------
+
+delete_statement := "DELETE" name_scope_operator_sequence access_sequence ";"
+{
+  MAKE_NODE("delete_statement");
+  REDUCE("DELETE", $2, $3, ";");
+}
+                  | "DELETE[]" name_scope_operator_sequence access_sequence ";"
+{
+  MAKE_NODE("delete_statement");
+  REDUCE("DELETE[]", $2, $3, ";");
+}
+                  ;
+
+jump_statement := "CONTINUE" ";"
+{
+  MAKE_NODE("jump_statement");
+  REDUCE("CONTINUE", ";");
+}
+                | "BREAK" ";"
+{
+  MAKE_NODE("jump_statement");
+  REDUCE("BREAK", ";");
+}
+                | "RETURN" expression ";"
+{
+  MAKE_NODE("jump_statement");
+  REDUCE("RETURN", $2, ";");
+}
+                | "RETURN" ";"
+{
+  MAKE_NODE("jump_statement");
+  REDUCE("RETURN", ";");
+}
+;
+
+iteration_statement := "WHILE" "(" expression ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("iteration_statement");
+  REDUCE("WHILE", "(", $3, ")", "{", $6, "}");
+}
+                     | "DO" "{" statemsent_sequence_maybe_null "}" "WHILE" "(" expression ")" ";"
+{
+  MAKE_NODE("iteration_statement");
+  REDUCE("DO", "{", $3, "}", "WHILE", "(", $7, ")", ";");
+}
+                     | for_statement
+{
+  MAKE_NODE("iteration_statement");
+  REDUCE($1);
+}
+                     ;
+
+for_statement := "FOR" "(" type_name declarator_list ";" expression ";" expression ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("for_statement");
+  REDUCE("FOR", "(", $3, $4, ";", $6, ";", $8, ")", "{", $11, "}");
+}
+               | "FOR" "(" type_name declarator_list ";" ";" expression ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("for_statement");
+  REDUCE("FOR", "(", $3, $4, ";", ";", $7, ")", "{", $10, "}");
+}
+               | "FOR" "(" type_name declarator_list ";" expression ";" ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("for_statement");
+  REDUCE("FOR", "(", $3, $4, ";", $6, ";", ")", "{", $10, "}");
+}
+               | "FOR" "(" type_name declarator_list ";" ";" ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("for_statement");
+  REDUCE("FOR", "(", $3, $4, ";", ";", ")", "{", $9, "}");
+}
+               ;
+
+if_statement := "IF" "(" expression ")" "{" statemsent_sequence_maybe_null "}" "ELSE" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("if_statement");
+  REDUCE("IF", "(", $3, ")", "{", $6, "}", "ELSE", "{", $10, "}");
+}
+              | "IF" "(" expression ")" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("if_statement");
+  _reduce_($$,"IF", "(", $3, ")", "{", $6, "}");
+}
+              ;
+
+synchronized_block := "SYNCHRONIZED" "{" statemsent_sequence_maybe_null "}"
+{
+  MAKE_NODE("synchronized_block");
+  REDUCE("SYNCHRONIZED", "{", $3, "}");
+}
+
+
+```

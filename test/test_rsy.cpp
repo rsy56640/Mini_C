@@ -47,6 +47,28 @@ void rsy_lexer_test()
 		out << str << std::endl;
 	}
 	else std::cout << "ok" << std::endl;
+
+	out << "\n-----------------------------------------\n" << std::endl;
+
+#undef out
+#undef out
+
+	std::ofstream tree_out;
+	const char* out_path = "C:/Users/lenovo/Source/Repos/___RulsTSL/x64/Release/tree.txt";
+	tree_out.open(out_path, std::ios::out | std::ios::trunc);
+	if (!os.is_open())
+	{
+		std::cout << "Can't open file: " << out_path << std::endl;
+		exit(0);
+	}
+
+	Node_ptr root = *getRoot();
+
+	DotGen(root, tree_out);
+
+	// Dtor
+	delete root;
+
 }
 
 

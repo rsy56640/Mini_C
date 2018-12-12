@@ -73,8 +73,6 @@ page := using_sentence
       | page declaration
       ;
 
-//expression := assignment_expression comma_assignment_expression_list;
-//declaration := declaration_specifier declarator_list ";";
 
 name := "id";
 type_name := type_specifier pointer_level                                      // [const] T (*)
@@ -339,9 +337,13 @@ iteration_statement := "WHILE" "(" expression ")" "{" statemsent_sequence_maybe_
                      ;
 
 for_statement := "FOR" "(" type_name declarator_list ";" expression ";" expression")" "{" statemsent_sequence_maybe_null "}"
-               | "FOR" "(" type_name declarator_list ";" ";" expression ")" "{" statemsent_sequence_maybe_null "}"
                | "FOR" "(" type_name declarator_list ";" expression ";" ")" "{" statemsent_sequence_maybe_null "}"
+               | "FOR" "(" type_name declarator_list ";" ";" expression ")" "{" statemsent_sequence_maybe_null "}"
                | "FOR" "(" type_name declarator_list ";" ";" ")" "{" statemsent_sequence_maybe_null "}"
+               | "FOR" "(" ";" expression ";" expression")" "{" statemsent_sequence_maybe_null "}"
+               | "FOR" "(" ";" expression ";" ")" "{" statemsent_sequence_maybe_null "}"
+               | "FOR" "(" ";" ";" expression ")" "{" statemsent_sequence_maybe_null "}"
+               | "FOR" "(" ";" ";" ")" "{" statemsent_sequence_maybe_null "}"
                ;
 
 if_statement := "IF" "(" expression ")" "{" statemsent_sequence_maybe_null "}" "ELSE" "{" statemsent_sequence_maybe_null "}"

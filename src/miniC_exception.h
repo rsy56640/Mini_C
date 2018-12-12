@@ -34,4 +34,18 @@ namespace Mini_C
 		}
 	};
 
+	class MiniC_Runtime_Exception
+	{
+		const std::string _msg;
+		virtual void printEx() const { std::cout << (*this) << std::endl; }
+	public:
+		MiniC_Runtime_Exception(const std::string& msg) :_msg(msg) {}
+		MiniC_Runtime_Exception(std::string&& msg) :_msg(std::move(msg)) {}
+		friend std::ostream& operator<<(std::ostream& os, const MiniC_Runtime_Exception& e)
+		{
+			os << "Runtime Error: " << e._msg;
+			return os;
+		}
+	};
+
 }
