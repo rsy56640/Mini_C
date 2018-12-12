@@ -2514,7 +2514,7 @@ namespace Mini_C::LR1
 			std::visit(overloaded{
 			[](Node_ptr &__c3, Node_ptr &__c6, Node_ptr &__r) {
 			MAKE_NODE("if_statement");
-			  _reduce_(__r,"IF", "(", __c3, ")", "{", __c6, "}");
+			  REDUCE("IF", "(", __c3, ")", "{", __c6, "}");
 
 			}
 			,[](auto &, auto &, auto &) { assert(false); },
