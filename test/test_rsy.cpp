@@ -38,36 +38,25 @@ void rsy_lexer_test()
 	_lexer.print(out);
 	out << "\n-----------------------------------------\n" << std::endl;
 
-	std::optional<std::pair<Mini_C::lexer::Token, std::string>> result =
+	std::vector<std::pair<Mini_C::lexer::Token, std::string>> error_result =
 		Mini_C::LR1::analyze(_lexer);
-	if (result.has_value())
+	if (error_result.size() > 0)
 	{
-		auto const&[token, str] = result.value();
+		out << "\n----------------------------------------------------------------------------------\n";
+		out << "\n------------------------------------  errors  ------------------------------------\n";
+		out << "\n----------------------------------------------------------------------------------\n";
+	}
+	for (auto const&[token, str] : error_result)
+	{
+		out << "\n-----------------------------------------\n";
 		Mini_C::TEST::outputToken(token, out);
 		out << str << std::endl;
 	}
-	else std::cout << "ok" << std::endl;
+	if (error_result.size() == 0) std::cout << "ok" << std::endl;
 
 	out << "\n-----------------------------------------\n" << std::endl;
 
 #undef out
-#undef out
-
-	std::ofstream tree_out;
-	const char* out_path = "C:/Users/lenovo/Source/Repos/___RulsTSL/x64/Release/tree.txt";
-	tree_out.open(out_path, std::ios::out | std::ios::trunc);
-	if (!os.is_open())
-	{
-		std::cout << "Can't open file: " << out_path << std::endl;
-		exit(0);
-	}
-
-	Node_ptr root = *getRoot();
-
-	DotGen(root, tree_out);
-
-	// Dtor
-	delete root;
 
 }
 

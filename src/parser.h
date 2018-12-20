@@ -21,7 +21,7 @@ namespace Mini_C::parser
 		String(const lexer::string_literal_t& string)
 			:_string(std::get<0>(string)), _size(_string.size()) {}
 		std::size_t size() const { return _size; }
-		char& access(int pos) {
+		char access(int pos) {
 			if (pos < 0 || pos >= _size)
 				throw MiniC_Runtime_Exception{
 				std::string("\"") + _string + "\" access out of range!!!" };
@@ -53,6 +53,39 @@ namespace Mini_C::parser
 	struct UserClass;
 	struct FuncType;
 
+
+	/*
+	 * [const_specifier]
+	 * [storage duration]
+	 * [if still hold the resource]
+	 *
+	 */
+	struct ValueSemantic
+	{
+		bool _is_const; // const
+		bool _is_owned; // on stack or on heap.
+		bool _heap_allocated; // new or deleted. 
+	};
+
+
+	/*
+	 * int *p  = &a;      // a { 0 }
+	 * int **q = &p + 2;  // a { 0, 2 }
+	 * **q = &p;		  // a { 0, 0 }
+	 */
+	struct PointerLevel
+	{
+	private:
+		std::vector<std::ptrdiff_t> _level; // store each level ptrdiff_t
+	public:
+		PointerLevel() = default;
+		PointerLevel(const PointerLevel& other) :_level(other._level) {}
+		void AddressOf(std::size_t n) { _level.resize(_level.size() + n, 0); }
+		void Dereference(std::size_t n) {}
+		void Offset(std::ptrdiff_t offset) { _level.back() += offset; }
+	};
+
+
 	/*
 	 * Expression value and Type
 	 */
@@ -60,11 +93,9 @@ namespace Mini_C::parser
 	struct ValueType
 	{
 	private:
-		bool _is_owned; // on stack or on heap.
-		bool _heap_allocated; // new or deleted. 
-
+		ValueSemantic _valueSemantic;
 		valueType _valueType;
-		std::size_t _pointer_level;
+		PointerLevel _pointerLevel;
 	public:
 
 
@@ -75,8 +106,10 @@ namespace Mini_C::parser
 	 * struct, union
 	 * non-static member: var, type_alias, func_var
 	 */
+	 // now only support struct
 	struct UserClass
 	{
+
 
 
 	};
@@ -87,7 +120,7 @@ namespace Mini_C::parser
 	 * func<Ret(Args...)>
 	 *
 	 */
-	class FuncType
+	struct FuncType
 	{
 	private:
 
