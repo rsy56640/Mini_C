@@ -586,7 +586,7 @@ namespace Mini_C::preprocess
 					// "#define xxx ..."
 					else
 					{
-						Macros::define_macro(macro, Macros::macro_t::object, line_num);;
+						Macros::define_macro(macro, Macros::macro_t::object, line_num);
 					}
 
 					// push replace line for "macro_t::object" and "macro_t::function"
@@ -618,7 +618,7 @@ namespace Mini_C::preprocess
 			} // end "#define"
 
 
-			  // `#undef`
+			// `#undef`
 			else if (line._Starts_with("#undef "))
 			{
 				std::pair<std::string, int> p;
@@ -632,7 +632,7 @@ namespace Mini_C::preprocess
 			} // end "#undef"
 
 
-			  // may replace
+			// may replace
 			else
 			{
 				std::list<std::tuple<std::string, std::size_t, bool>> new_lines =

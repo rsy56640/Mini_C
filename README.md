@@ -7,9 +7,10 @@
 &nbsp;   
 ## 项目简介
 
-1. 调用 `Mini_C::lexer::Lexer lexer; lexer.tokenize(const char* filename)` 扫描文件（使用 `lexer.print()` 输出 token 信息）
-2. 调用 `Mini_C::LR1::analyze(lexer);` 进行 LR1 分析，并在规约时进行相应的语义动作
-3. AST
+1. 调用 `Mini_C::preprocess::preprocess(filename)` 进行预处理，扫描并替换宏，输出一个新的文件，用于后续的词法分析
+2. 调用 `Mini_C::lexer::Lexer lexer; lexer.tokenize(const char* filename)` 扫描文件（使用 `lexer.print()` 输出 token 信息）
+3. 调用 `Mini_C::LR1::analyze(lexer);` 进行 LR1 分析，并在规约时进行相应的语义动作
+4. AST
 
 
 &nbsp;   
@@ -29,7 +30,7 @@
 ## 关于 RulesTranslator 的说明
 
 原作者：黎冠延，[ssyram/RulesTranslator](https://github.com/ssyram/RulesTranslator)   
-目前项目中使用的是我稍作修改的版本。   
+目前项目中使用的是我稍作修改的版本（主要加了日志，修改了DFA遍历顺序）   
 
 有几个 path 我写死了：
 
