@@ -561,7 +561,7 @@ namespace Mini_C::lexer
 	/*
 	 * class member function for Lexer.
 	 */
-	void Lexer::tokenize(const char* filename)
+	void Lexer::tokenize(const std::string filename)
 	{
 		constexpr std::size_t MAXSIZE = 256;
 		char buffer[MAXSIZE];

@@ -314,7 +314,7 @@ namespace Mini_C::lexer
 	class Lexer
 	{
 	public:
-		void tokenize(const char* filename);
+		void tokenize(const std::string filename);
 		std::size_t size() const;
 		const Token& operator[](std::size_t pos) const { return _token_stream[pos]; }
 		bool empty() const;

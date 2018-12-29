@@ -1,3 +1,17 @@
+#define MAX 1000
+#define foo_template(T)\
+fn foo(T obj) ->T {\
+    T i = _FUCK_(T, obj, 2, 233) * 2;\
+    return cast<T>(obj + i);\
+}
+
+#define _FUCK_(T,a, b, x) cast<T>(a)*b+x
+
+foo_template(i32)
+#undef _FUCK_
+#define _FUCK_(T,a, b, x) cast<T>(a)/b-x
+foo_template(f64)
+
 union B;
 struct A;
 
@@ -65,7 +79,7 @@ fn main()-> i32
 	if(a->_b == 3){
 		A::_a = 7e1_0;
 	}
-	for(i32 i = 0; i < 100;i++)
+	for(i32 i = 0; i < MAX;i++)
 	{
 		a->_b++;
 		if(i ==0){ break;}

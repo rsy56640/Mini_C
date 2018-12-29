@@ -137,7 +137,7 @@ unary_expression := unary_operator_sequence pre_fix_sequence post_fix_expression
                   | cast_expression
                   | "SIZEOF" "(" type_name ")"
                   ;
-cast_expression := "CAST" "<" type_name ">" "(" unary_expression ")";
+cast_expression := "CAST" "<" type_name ">" "(" constant_expression ")";
 
 
 multiplicative_operator := "*" 

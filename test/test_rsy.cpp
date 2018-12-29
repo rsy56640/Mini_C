@@ -7,6 +7,7 @@
 #include <type_traits>
 #include "../src/lexer.h"
 #include "../src/miniC_exception.h"
+#include "../src/preprocess.h"
 #include "test.h"
 #include <fstream>
 #include <iomanip>
@@ -30,11 +31,23 @@ auto ____ = []()
 
 void rsy_lexer_test()
 {
-	Mini_C::lexer::Lexer _lexer;
-	try { _lexer.tokenize("./test/rsy1.txt"); }
+
+	bool preprocess = false;
+	std::string file;
+	try { file = Mini_C::preprocess::preprocess("./test/rsy1.txt", os); preprocess = true; }
 	catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); std::cout << std::endl; }
 	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
+	if (!preprocess) return;
+
+	bool lex = false;
+	Mini_C::lexer::Lexer _lexer;
+	try { _lexer.tokenize(file); lex = true; }
+	catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); std::cout << std::endl; }
+	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
+	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
+	if (!lex) return;
+
 	_lexer.print(out);
 	out << "\n-----------------------------------------\n" << std::endl;
 
@@ -56,6 +69,7 @@ void rsy_lexer_test()
 
 	out << "\n-----------------------------------------\n" << std::endl;
 
+#undef out
 #undef out
 
 }
