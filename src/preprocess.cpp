@@ -435,7 +435,7 @@ namespace Mini_C::preprocess
 				return ret;
 			} // end function replace();
 
-			  // for debug
+			// for debug
 			static void print(std::ostream& out)
 			{
 				for (auto const&[s, b] : macros)
@@ -594,7 +594,8 @@ namespace Mini_C::preprocess
 					bool next_line = false;
 					int _pos = pos;
 					while (pos < size && line[pos] != '\\') pos++;
-					Macros::push_replace(macro, std::string(line, _pos, pos - _pos));
+					if (pos != _pos)
+						Macros::push_replace(macro, std::string(line, _pos, pos - _pos));
 					if (pos != size) next_line = true;
 					it = lines.erase(it); // erase this line
 					while (next_line)

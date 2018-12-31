@@ -30,7 +30,7 @@
 ## 关于 RulesTranslator 的说明
 
 原作者：黎冠延，[ssyram/RulesTranslator](https://github.com/ssyram/RulesTranslator)   
-目前项目中使用的是我稍作修改的版本（主要加了日志，修改了DFA遍历顺序）   
+目前项目中使用的是我稍作修改的[版本](https://github.com/rsy56640/RulesTranslator)（主要加了日志，修改了DFA遍历顺序）   
 
 有几个 path 我写死了：
 
