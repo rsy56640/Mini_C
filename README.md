@@ -38,5 +38,5 @@
   - `"rule.tsl"`（文法产生式输入文件）
   - `"lr1.hpp"`（输出的 hpp 文件，直接用于 Mini_C 项目）
 - TableGenerator.cpp 中 `"rule.lr1"`，输出 LR1 的 DFA
-  - 如果文法中有 “移进规约冲突”，默认选择规约，并且最后所有的选择信息输出在 `"Collision choose list: x entries"`
+  - 如果文法中有 “移进规约冲突”，默认选择移进，并且最后所有的选择信息输出在 `"Collision choose list: x entries"`
   - 如果有 “规约规约冲突”，那么立即结束，最后输出 `"Collision occurs"` 和规约的产生式编号
