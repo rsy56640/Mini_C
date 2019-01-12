@@ -14,7 +14,8 @@
 #include <fstream>
 
 std::ofstream os;
-const char* out_path = "C:/Users/lenovo/Source/Repos/___RulsTSL/x64/Release/result.lr1";
+const char* out_path = "D:/Git_repositories/Mini_C/doc/result.lr1";
+const char* program_txt = "D:/Git_repositories/Mini_C/test/test/rsy.txt";
 auto ____ = []()
 {
 	os.open(out_path, std::ios::out | std::ios::trunc);
@@ -34,7 +35,7 @@ void rsy_lexer_test()
 
 	bool preprocess = false;
 	std::string file;
-	try { file = Mini_C::preprocess::preprocess("./test/rsy1.txt", os); preprocess = true; }
+	try { file = Mini_C::preprocess::preprocess(program_txt, os); preprocess = true; }
 	catch (const Mini_C::MiniC_Base_Exception& e) { e.printException(); std::cout << std::endl; }
 	catch (const std::exception& e) { std::cout << e.what() << std::endl << std::endl; }
 	catch (...) { std::cout << "WTF: Unexpected Exception" << std::endl << std::endl; }
