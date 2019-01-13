@@ -645,7 +645,6 @@ namespace Mini_C::preprocess
 				}
 				it = lines.erase(it);
 				it = lines.insert(it, new_lines.begin(), new_lines.end());
-				size = new_lines.size();
 			} // end macro replace
 
 		} // end preprocess
